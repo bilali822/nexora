@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }} — Nexora{% endblock %}
+{% block content %}
+<section class="section"><div class="container narrow">
+  <nav class="breadcrumbs"><a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><a href="{% url 'core:blog_list' %}">المدونة</a><span>/</span><span>{{ post.title }}</span></nav>
+  <h1>{{ post.title }}</h1>
+  <p class="meta">{{ post.created_at|date:"Y-m-d" }}</p>
+  {% if post.cover %}<img src="{{ post.cover.url }}" class="post-cover">{% endif %}
+  <div class="prose">{{ post.content|linebreaks }}</div>
+</div></section>
+{% if related %}<section class="section alt"><div class="container">
+  <h2>مقالات ذات صلة</h2>
+  <div class="grid">{% for r in related %}<a href="{{ r.get_absolute_url }}" class="blog-card"><div class="blog-body"><h3>{{ r.title }}</h3><p>{{ r.excerpt }}</p></div></a>{% endfor %}</div>
+</div></section>{% endif %}
+{% endblock %}

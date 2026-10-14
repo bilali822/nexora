@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}تتبع طلبك — Nexora{% endblock %}
+{% block content %}
+<section class="section"><div class="container narrow">
+  <h1>تتبع طلبك</h1>
+  <form method="get" class="search-form"><input type="text" name="id" value="{{ q }}" placeholder="رقم التتبع" class="form-input"><button class="btn-primary">تتبع</button></form>
+  {% if req %}
+  <div class="track-result">
+    <h2>{{ req.name }}</h2>
+    <div class="info-box"><span>النوع</span><strong>{{ req.get_project_type_display }}</strong></div>
+    <div class="info-box"><span>الحالة</span><strong class="status-{{ req.status }}">{{ req.get_status_display }}</strong></div>
+    <div class="info-box"><span>التاريخ</span><strong>{{ req.created_at|date:"Y-m-d" }}</strong></div>
+  </div>
+  {% elif q %}<p>لا يوجد طلب بهذا الرقم.</p>{% endif %}
+</div></section>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}أعمالنا — Nexora{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <nav class="breadcrumbs"><a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><span>أعمالنا</span></nav>
+  <h1>أعمالنا</h1>
+</div></section>
+<section class="section"><div class="container">
+  <div class="filter-bar">
+    <a href="{% url 'projects:list' %}" class="{% if not active_category %}active{% endif %}">الكل</a>
+    <a href="?category=website" class="{% if active_category == 'website' %}active{% endif %}">مواقع</a>
+    <a href="?category=webapp" class="{% if active_category == 'webapp' %}active{% endif %}">تطبيقات</a>
+    <a href="?category=store" class="{% if active_category == 'store' %}active{% endif %}">متاجر</a>
+    <a href="?category=dashboard" class="{% if active_category == 'dashboard' %}active{% endif %}">لوحات تحكم</a>
+    <a href="?category=ui" class="{% if active_category == 'ui' %}active{% endif %}">UI/UX</a>
+  </div>
+  <div class="grid">
+    {% for p in projects %}
+    <a href="{{ p.get_absolute_url }}" class="project-card animate">
+      <img src="{{ p.cover.url }}" alt="{{ p.title }}" loading="lazy">
+      <div class="project-overlay"><span class="tag">{{ p.get_category_display }}</span><h3>{{ p.title }}</h3></div>
+    </a>
+    {% empty %}<p>لا مشاريع بعد.</p>{% endfor %}
+  </div>
+</div></section>
+{% endblock %}

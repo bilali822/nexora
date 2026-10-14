@@ -1,0 +1,26 @@
+{% load i18n %}
+<div id="cookieConsent" style="display:none;position:fixed;bottom:0;inset-inline:0;background:var(--bg-2);border-top:1px solid var(--border);padding:20px;z-index:9990;box-shadow:0 -10px 40px rgba(0,0,0,0.3)">
+  <div class="container" style="display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+    <p style="margin:0;color:var(--text-2);font-size:14px">
+      🍪 {% trans "نستخدم الكوكيز لتحسين تجربتك على الموقع." %}
+      <a href="/privacy/" style="color:var(--accent)">{% trans "اعرف المزيد" %}</a>
+    </p>
+    <div style="display:flex;gap:8px">
+      <button onclick="acceptCookies()" class="btn-primary btn-sm">{% trans "موافق" %}</button>
+      <button onclick="rejectCookies()" class="btn-ghost btn-sm">{% trans "رفض" %}</button>
+    </div>
+  </div>
+</div>
+<script>
+function acceptCookies() {
+  localStorage.setItem('cookiesAccepted', 'yes');
+  document.getElementById('cookieConsent').style.display = 'none';
+}
+function rejectCookies() {
+  localStorage.setItem('cookiesAccepted', 'no');
+  document.getElementById('cookieConsent').style.display = 'none';
+}
+if (!localStorage.getItem('cookiesAccepted')) {
+  setTimeout(function(){ document.getElementById('cookieConsent').style.display = 'block'; }, 2000);
+}
+</script>

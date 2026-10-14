@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}الخدمات — Nexora{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <nav class="breadcrumbs"><a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><span>الخدمات</span></nav>
+  <h1>خدماتنا</h1>
+  <p>حلول رقمية متكاملة لمشروعك</p>
+</div></section>
+<section class="section"><div class="container">
+  <div class="grid">
+    {% for s in services %}
+    <a href="{{ s.get_absolute_url }}" class="card card-link animate">
+      <div class="card-icon"><i class="fas {{ s.icon|default:'fa-code' }}"></i></div>
+      <h3>{{ s.title }}</h3>
+      <p>{{ s.description }}</p>
+      {% if s.starting_price %}<span class="tag">يبدأ من {{ s.starting_price }}</span>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</div></section>
+{% endblock %}

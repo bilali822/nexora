@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}اطلب موقعك أو تطبيقك — Nexora{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <h1>اطلب موقعك أو تطبيقك</h1>
+  <p>املأ النموذج ورح نتواصل معك خلال 24 ساعة</p>
+</div></section>
+<section class="section"><div class="container narrow">
+  <form method="post" enctype="multipart/form-data" class="project-form">{% csrf_token %}
+    {% for field in form %}
+    <div class="field"><label>{{ field.label }}</label>{{ field }}{% if field.errors %}<small class="error">{{ field.errors|striptags }}</small>{% endif %}</div>
+    {% endfor %}
+    <div class="field"><label>ملفات مرفقة (شعار، صور مرجعية...)</label>
+      <input type="file" name="attachments" multiple class="form-input">
+    </div>
+    <button type="submit" class="btn-primary">أرسل الطلب <i class="fas fa-paper-plane"></i></button>
+    <a href="https://wa.me/96181274729" class="btn-ghost" target="_blank"><i class="fab fa-whatsapp"></i> واتساب مباشر</a>
+  </form>
+</div></section>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}المدونة — Nexora{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <nav class="breadcrumbs"><a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><span>المدونة</span></nav>
+  <h1>المدونة</h1>
+  <form method="get" class="search-form"><input type="text" name="q" value="{{ q }}" placeholder="ابحث..." class="form-input"><button class="btn-primary">بحث</button></form>
+</div></section>
+<section class="section"><div class="container">
+  <div class="grid">{% for p in posts %}
+    <a href="{{ p.get_absolute_url }}" class="blog-card animate">
+      {% if p.cover %}<img src="{{ p.cover.url }}" alt="{{ p.title }}">{% endif %}
+      <div class="blog-body">
+        <span class="tag">{{ p.created_at|date:"Y-m-d" }}</span>
+        <h3>{{ p.title }}</h3>
+        <p>{{ p.excerpt }}</p>
+      </div>
+    </a>
+  {% empty %}<p>لا مقالات بعد.</p>{% endfor %}</div>
+</div></section>
+{% endblock %}

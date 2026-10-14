@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}من نحن — Nexora{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <nav class="breadcrumbs"><a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><span>من نحن</span></nav>
+  <h1>من نحن</h1>
+  <p>نبني تجارب رقمية تواكب المستقبل</p>
+</div></section>
+{% if stats %}<section class="stats-section"><div class="container">
+  <div class="stats-grid">{% for s in stats %}<div class="stat-card"><i class="fas {{ s.icon }}"></i><div class="stat-value">{{ s.value }}</div><div class="stat-label">{{ s.label }}</div></div>{% endfor %}</div>
+</div></section>{% endif %}
+<section class="section"><div class="container narrow prose">
+  <h2>قصتنا</h2>
+  <p>Nexora استوديو متخصص بتصميم وتطوير المواقع وتطبيقات الويب. نؤمن إن التصميم الحديث والكود النظيف هما أساس أي مشروع ناجح.</p>
+  <p>نعمل مع عملاء من مختلف القطاعات، ونساعدهم يحوّلوا أفكارهم لمنتجات رقمية حقيقية.</p>
+</div></section>
+{% if why_us %}<section class="section alt"><div class="container">
+  <div class="section-head center"><h2>لماذا نحن؟</h2></div>
+  <div class="grid">{% for w in why_us %}<div class="feature-card"><div class="feature-icon"><i class="fas {{ w.icon }}"></i></div><h3>{{ w.title }}</h3><p>{{ w.description }}</p></div>{% endfor %}</div>
+</div></section>{% endif %}
+{% endblock %}

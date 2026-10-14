@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}تواصل — Nexora{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <nav class="breadcrumbs"><a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><span>تواصل</span></nav>
+  <h1>تواصل معنا</h1>
+  <p>راسلنا ورح نرد خلال 24 ساعة</p>
+</div></section>
+<section class="section"><div class="container narrow">
+  <form method="post" class="project-form">{% csrf_token %}
+    {% for field in form %}<div class="field"><label>{{ field.label }}</label>{{ field }}{% if field.errors %}<small class="error">{{ field.errors|striptags }}</small>{% endif %}</div>{% endfor %}
+    <button class="btn-primary" type="submit">أرسل الرسالة</button>
+  </form>
+  <div class="contact-info">
+    <div class="info-box"><i class="fas fa-envelope"></i><span>الإيميل</span><strong>hello@nexora.dev</strong></div>
+    <div class="info-box"><i class="fab fa-whatsapp"></i><span>واتساب</span><strong>+961 00 000 000</strong></div>
+  </div>
+</div></section>
+{% endblock %}

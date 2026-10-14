@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}{{ project.title }} — Nexora{% endblock %}
+{% block content %}
+<section class="section"><div class="container">
+  <nav class="breadcrumbs"><a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><a href="{% url 'projects:list' %}">أعمالنا</a><span>/</span><span>{{ project.title }}</span></nav>
+  <h1>{{ project.title }}</h1>
+  <p class="meta">{{ project.get_category_display }}{% if project.client_name %} · {{ project.client_name }}{% endif %}</p>
+  <img src="{{ project.cover.url }}" class="post-cover">
+  <div class="prose">{{ project.description|linebreaks }}</div>
+  {% if project.challenge %}<div class="info-block"><h3>التحدي</h3><p>{{ project.challenge }}</p></div>{% endif %}
+  {% if project.solution %}<div class="info-block"><h3>الحل</h3><p>{{ project.solution }}</p></div>{% endif %}
+  {% if project.result %}<div class="info-block"><h3>النتيجة</h3><p>{{ project.result }}</p></div>{% endif %}
+  <div class="tech-tags">{% for t in project.tech_list %}<span class="tag">{{ t }}</span>{% endfor %}</div>
+  {% if project.url %}<a href="{{ project.url }}" target="_blank" class="btn-primary">زيارة المشروع <i class="fas fa-external-link-alt"></i></a>{% endif %}
+
+  {% if project.images.all %}
+  <h2 style="margin-top:60px">معرض الصور</h2>
+  <div class="gallery">{% for img in project.images.all %}<img src="{{ img.image.url }}" alt="{{ img.caption }}" loading="lazy">{% endfor %}</div>
+  {% endif %}
+
+  {% if project.before_after.all %}
+  <h2 style="margin-top:60px">قبل / بعد</h2>
+  <div class="before-after">{% for ba in project.before_after.all %}
+    <div class="ba-item"><img src="{{ ba.before.url }}"><span>قبل</span></div>
+    <div class="ba-item"><img src="{{ ba.after.url }}"><span>بعد</span></div>
+  {% endfor %}</div>
+  {% endif %}
+</div></section>
+{% if related %}<section class="section alt"><div class="container">
+  <h2>مشاريع مشابهة</h2>
+  <div class="grid">{% for r in related %}<a href="{{ r.get_absolute_url }}" class="project-card"><img src="{{ r.cover.url }}"><div class="project-overlay"><h3>{{ r.title }}</h3></div></a>{% endfor %}</div>
+</div></section>{% endif %}
+{% endblock %}

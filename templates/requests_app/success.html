@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section"><div class="container narrow center">
+  <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+  <h1>تم إرسال طلبك!</h1>
+  <p>رقم التتبع الخاص بك:</p>
+  <div class="tracking-id">{{ req.tracking_id }}</div>
+  <p>احفظ هذا الرقم لتتبع حالة طلبك.</p>
+  <div class="hero-actions" style="justify-content:center">
+    <a href="{% url 'core:home' %}" class="btn-primary">الرئيسية</a>
+    <a href="{% url 'requests_app:track' %}?id={{ req.tracking_id }}" class="btn-ghost">تتبع الطلب</a>
+  </div>
+</div></section>
+{% endblock %}

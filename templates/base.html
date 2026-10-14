@@ -1,0 +1,246 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'ar' }}" dir="{% if LANGUAGE_CODE == 'en' %}ltr{% else %}rtl{% endif %}" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Nexora — Web & Apps{% endblock %}</title>
+<meta name="description" content="{% block description %}Nexora تصمم وتطور مواقع وتطبيقات ويب حديثة، متاجر إلكترونية، لوحات تحكم، وواجهات UI/UX.{% endblock %}">
+<meta name="keywords" content="{% block keywords %}مواقع, تطبيقات ويب, تصميم, Django, React, لبنان, Nexora{% endblock %}">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="{% block og_title %}Nexora — Web & Apps{% endblock %}">
+<meta property="og:description" content="{% block og_desc %}نبني مواقع وتطبيقات ويب تواكب المستقبل.{% endblock %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% if settings.SITE_URL %}<meta property="og:image" content="{{ settings.SITE_URL }}/static/favicon.svg">{% endif %}
+<meta property="og:site_name" content="Nexora">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Canonical -->
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+<link rel="apple-touch-icon" href="{% static 'favicon.svg' %}">
+
+<!-- Fonts & Icons -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- CSS -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<!-- Schema.org -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Nexora",
+  "url": "{{ settings.SITE_URL }}",
+  "description": "استوديو متخصص بتصميم وتطوير المواقع وتطبيقات الويب",
+  "sameAs": []
+}
+</script>
+
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="nx-loader">
+  <div class="nx-loader-logo">Nexora.</div>
+</div>
+
+<!-- Reading Progress -->
+<div id="nx-progress"></div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="nx-lightbox"><img src="" alt=""></div>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="{% url 'core:home' %}" class="logo">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5B8CFF"/>
+            <stop offset="100%" stop-color="#8B5CF6"/>
+          </linearGradient>
+        </defs>
+        <rect width="32" height="32" rx="8" fill="url(#lg)"/>
+        <path d="M9 22V10l14 12V10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      Nexora<span>.</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="{% url 'core:home' %}">{% trans "الرئيسية" %}</a>
+      <a href="{% url 'core:services' %}">{% trans "الخدمات" %}</a>
+      <a href="{% url 'projects:list' %}">{% trans "أعمالنا" %}</a>
+      <a href="{% url 'core:pricing' %}">{% trans "الأسعار" %}</a>
+      <a href="{% url 'core:blog_list' %}">{% trans "المدونة" %}</a>
+      <a href="{% url 'core:about' %}">{% trans "من نحن" %}</a>
+      <a href="{% url 'core:contact' %}">{% trans "تواصل" %}</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button id="themeToggle" class="icon-btn" aria-label="Theme"><i class="fas fa-moon"></i></button>
+      <form action="{% url 'set_language' %}" method="post" class="lang-form">{% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.path }}">
+        <select name="language" onchange="this.form.submit()" class="lang-select">
+          <option value="ar" {% if LANGUAGE_CODE == 'ar' %}selected{% endif %}>ع</option>
+          <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
+        </select>
+      </form>
+      <a href="{% url 'requests_app:form' %}" class="btn-primary btn-sm">{% trans "اطلب موقعك" %}</a>
+      <button class="menu-toggle icon-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+{% if messages %}
+<div class="container">
+  {% for m in messages %}<div class="alert">{{ m }}</div>{% endfor %}
+</div>
+{% endif %}
+
+<main>{% block content %}{% endblock %}</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo">Nexora<span>.</span></div>
+        <p>{% trans "نبني مواقع وتطبيقات ويب حديثة، سريعة، ومتجاوبة." %}</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault();this.querySelector('input').value='';this.querySelector('button').textContent='✓';">
+          <input type="email" placeholder="{% trans 'إيميلك للنشرة' %}" required>
+          <button type="submit">{% trans "اشترك" %}</button>
+        </form>
+      </div>
+      <div>
+        <h4>{% trans "روابط" %}</h4>
+        <a href="{% url 'core:services' %}">{% trans "الخدمات" %}</a>
+        <a href="{% url 'projects:list' %}">{% trans "أعمالنا" %}</a>
+        <a href="{% url 'core:pricing' %}">{% trans "الأسعار" %}</a>
+        <a href="{% url 'core:blog_list' %}">{% trans "المدونة" %}</a>
+      </div>
+      <div>
+        <h4>{% trans "الدعم" %}</h4>
+        <a href="{% url 'core:contact' %}">{% trans "تواصل" %}</a>
+        <a href="{% url 'core:privacy' %}">{% trans "سياسة الخصوصية" %}</a>
+        <a href="{% url 'core:terms' %}">{% trans "الشروط والأحكام" %}</a>
+        <a href="{% url 'requests_app:track' %}">{% trans "تتبع طلبك" %}</a>
+      </div>
+      <div>
+        <h4>{% trans "تابعنا" %}</h4>
+        <div class="social">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://wa.me/96181274729" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Nexora — Web & Apps © {% now "Y" %} — {% trans "جميع الحقوق محفوظة" %}</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating Elements -->
+<a href="https://wa.me/96181274729" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<button id="scrollTop" class="scroll-top" aria-label="Top"><i class="fas fa-arrow-up"></i></button>
+
+<a href="{% url 'requests_app:form' %}" class="sticky-cta" id="stickyCta">
+  <i class="fas fa-rocket"></i> {% trans "اطلب موقعك الآن" %}
+</a>
+
+<!-- Social Proof -->
+<div class="social-proof" id="socialProof">
+  <div class="sp-avatar">أ</div>
+  <div class="sp-content">
+    <strong>أحمد</strong> طلب موقع جديد
+    <small>قبل 5 دقائق</small>
+  </div>
+</div>
+
+<!-- Exit Intent Modal -->
+<div class="exit-modal" id="exitIntentModal">
+  <div class="exit-content">
+    <button class="exit-close" aria-label="Close">×</button>
+    <h2>✨ {% trans "انتظر لحظة!" %}</h2>
+    <p>{% trans "احصل على خصم 15% على أول مشروع معنا. العرض ساري لمدة محدودة." %}</p>
+    <div class="hero-actions" style="justify-content:center">
+      <a href="{% url 'requests_app:form' %}" class="btn-primary">{% trans "احصل على الخصم" %}</a>
+      <button class="btn-ghost exit-close">{% trans "لا شكراً" %}</button>
+    </div>
+  </div>
+</div>
+
+<!-- JS -->
+<script src="{% static 'js/main.js' %}" defer></script>
+
+{% include "partials/cookie_consent.html" %}
+
+{% if settings.GOOGLE_ANALYTICS_ID %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.GOOGLE_ANALYTICS_ID }}"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '{{ settings.GOOGLE_ANALYTICS_ID }}');
+</script>
+{% endif %}
+
+{% if settings.FACEBOOK_PIXEL_ID %}
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '{{ settings.FACEBOOK_PIXEL_ID }}');
+fbq('track', 'PageView');
+</script>
+{% endif %}
+
+{% if settings.TAWKTO_PROPERTY_ID %}
+<script>
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/{{ settings.TAWKTO_PROPERTY_ID }}/{{ settings.TAWKTO_WIDGET_ID }}';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+{% endif %}
+
+{% if settings.HOTJAR_ID %}
+<script>
+(function(h,o,t,j,a,r){
+h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+h._hjSettings={hjid:{{ settings.HOTJAR_ID }},hjsv:6};
+a=o.getElementsByTagName('head')[0];
+r=o.createElement('script');r.async=1;
+r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+a.appendChild(r);
+})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
+{% endif %}
+
+</body>
+</html>

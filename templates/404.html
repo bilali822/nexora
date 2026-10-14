@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section center"><div class="container">
+  <h1 style="font-size:120px;background:linear-gradient(135deg,#5B8CFF,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">404</h1>
+  <h2>الصفحة غير موجودة</h2>
+  <p>الصفحة اللي بتدور عليها ما موجودة.</p>
+  <a href="{% url 'core:home' %}" class="btn-primary">الرئيسية</a>
+</div></section>
+{% endblock %}

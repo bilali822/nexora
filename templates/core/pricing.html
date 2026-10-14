@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}الأسعار — Nexora{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <nav class="breadcrumbs"><a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><span>الأسعار</span></nav>
+  <h1>الباقات والأسعار</h1>
+  <p>اختر الباقة المناسبة لمشروعك</p>
+</div></section>
+<section class="section"><div class="container">
+  <div class="pricing-grid">
+    {% for plan in pricing %}
+    <div class="pricing-card {% if plan.is_popular %}popular{% endif %}">
+      {% if plan.is_popular %}<span class="pop-badge">الأكثر طلباً</span>{% endif %}
+      <h3>{{ plan.name }}</h3>
+      <p class="tagline">{{ plan.tagline }}</p>
+      <div class="price">{{ plan.price }}</div>
+      <ul class="plan-features">{% for f in plan.features.all %}
+        <li class="{% if not f.included %}off{% endif %}"><i class="fas {% if f.included %}fa-check{% else %}fa-times{% endif %}"></i> {{ f.text }}</li>
+      {% endfor %}</ul>
+      <a href="{% url 'requests_app:form' %}" class="btn-primary">اختر الباقة</a>
+    </div>
+    {% endfor %}
+  </div>
+</div></section>
+{% if faqs %}<section class="section alt"><div class="container narrow">
+  <div class="section-head center"><h2>أسئلة شائعة</h2></div>
+  <div class="faq-list">{% for f in faqs %}<details class="faq-item"><summary>{{ f.question }}<i class="fas fa-chevron-down"></i></summary><p>{{ f.answer }}</p></details>{% endfor %}</div>
+</div></section>{% endif %}
+{% endblock %}
