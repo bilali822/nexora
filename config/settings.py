@@ -286,3 +286,35 @@ DEFAULT_FROM_EMAIL = 'Nexora <noreply@nexora.dev>'
 # CSRF_COOKIE_SECURE = True
 # SECURE_HSTS_SECONDS = 31536000
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# ========== PRODUCTION ==========
+import os
+import dj_database_url
+
+# من .env أو من Environment Variables
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+ALLOWED_HOSTS = ['*']
+
+# ثقة بـ Render و Cloudflare
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.onrender.com',
+    'https://*.dpdns.org',
+    'https://*.qzz.io',
+    'https://webbuilder.dpdns.org',
+]
+
+# Security
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
+# قاعدة البيانات
+if not DEBUG:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=config('DATABASE_URL', default='sqlite:///db.sqlite3'),
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
