@@ -335,3 +335,20 @@
   }
 
 })();
+
+// ============ Hide scroll-top when sticky CTA is visible ============
+(function () {
+  var stickyCta = document.getElementById('stickyCta');
+  var scrollTopBtn = document.getElementById('scrollTop');
+  if (!stickyCta || !scrollTopBtn) return;
+
+  var observer = new MutationObserver(function () {
+    if (stickyCta.classList.contains('show')) {
+      document.body.classList.add('sticky-cta-active');
+    } else {
+      document.body.classList.remove('sticky-cta-active');
+    }
+  });
+
+  observer.observe(stickyCta, { attributes: true, attributeFilter: ['class'] });
+})();

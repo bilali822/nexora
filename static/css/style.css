@@ -1729,3 +1729,17 @@ img, video, iframe {
 .scroll-top i { font-size: 16px; }
 .icon-btn i { font-size: 16px; }
 .social a i { font-size: 16px; }
+
+/* ============ Hide scroll-top when sticky CTA visible ============ */
+body.sticky-cta-active .scroll-top {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(20px);
+}
+
+/* على الموبايل — خفي زر الرجوع للأعلى تماماً لأن الـ sticky CTA أهم */
+@media (max-width: 768px) {
+  .scroll-top {
+    display: none !important;
+  }
+}
