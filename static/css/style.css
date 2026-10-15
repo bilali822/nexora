@@ -1697,3 +1697,35 @@ img, video, iframe {
     font-size: 13px;
   }
 }
+
+/* ============ Fix floating buttons icon centering ============ */
+.whatsapp-float,
+.scroll-top,
+.icon-btn,
+.social a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 0 !important;
+  padding: 0 !important;
+  text-align: center;
+}
+
+.whatsapp-float i,
+.scroll-top i,
+.icon-btn i,
+.social a i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  vertical-align: middle;
+  font-size: inherit;
+}
+
+.whatsapp-float i { font-size: 28px; }
+.scroll-top i { font-size: 16px; }
+.icon-btn i { font-size: 16px; }
+.social a i { font-size: 16px; }
