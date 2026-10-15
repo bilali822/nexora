@@ -29,7 +29,7 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             messages.success(request, f'تم إنشاء حسابك بنجاح! أهلاً {user.first_name or user.username}')
             return redirect('accounts:profile')
         else:
