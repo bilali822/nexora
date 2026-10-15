@@ -256,7 +256,7 @@
   // ============ 14. Price Calculator ============
   var calc = document.getElementById('nx-calculator');
   if (calc) {
-    var basePrices = { website: 299, webapp: 999, store: 799, dashboard: 599, ui: 199 };
+    var basePrices = { website: 49, webapp: 99, store: 99, dashboard: 79, ui: 19 };
     var pagesInput = calc.querySelector('#calcPages');
     var typeInput = calc.querySelector('#calcType');
     var options = calc.querySelectorAll('.calc-option input[type="checkbox"]');
@@ -267,7 +267,7 @@
       var type = typeInput.value;
       var pages = parseInt(pagesInput.value);
       pagesLabel.textContent = pages;
-      var total = basePrices[type] + (pages - 1) * 50;
+      var total = basePrices[type] + (pages - 1) * 5;
       options.forEach(function (opt) {
         if (opt.checked) total += parseInt(opt.dataset.price);
       });
