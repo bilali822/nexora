@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}إنشاء حساب — Nexora{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">Nexora<span>.</span></div>
+        <h1>إنشاء حساب جديد</h1>
+        <p>انضم إلينا في دقيقة 🚀</p>
+      </div>
+
+      <form method="post" class="auth-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-error">{{ form.non_field_errors|striptags }}</div>
+        {% endif %}
+
+        <div class="field">
+          <label for="{{ form.username.id_for_label }}">
+            <i class="fas fa-user"></i> اسم المستخدم
+          </label>
+          {{ form.username }}
+          {% if form.username.errors %}<small class="error">{{ form.username.errors|striptags }}</small>{% endif %}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.email.id_for_label }}">
+            <i class="fas fa-envelope"></i> البريد الإلكتروني
+          </label>
+          {{ form.email }}
+          {% if form.email.errors %}<small class="error">{{ form.email.errors|striptags }}</small>{% endif %}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.first_name.id_for_label }}">
+            <i class="fas fa-id-card"></i> الاسم الأول
+          </label>
+          {{ form.first_name }}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.phone.id_for_label }}">
+            <i class="fas fa-phone"></i> رقم الهاتف
+          </label>
+          {{ form.phone }}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.password1.id_for_label }}">
+            <i class="fas fa-lock"></i> كلمة السر
+          </label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}<small class="error">{{ form.password1.errors|striptags }}</small>{% endif %}
+          <small class="help-text">
+            <i class="fas fa-info-circle"></i> 8 خانات على الأقل، وليست كلها أرقام
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="{{ form.password2.id_for_label }}">
+            <i class="fas fa-lock"></i> تأكيد كلمة السر
+          </label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}<small class="error">{{ form.password2.errors|striptags }}</small>{% endif %}
+        </div>
+
+        <button type="submit" class="btn-primary btn-block">
+          <i class="fas fa-user-plus"></i> إنشاء حساب
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <p>عندك حساب؟ <a href="{% url 'accounts:login' %}">سجّل دخولك</a></p>
+      </div>
+    </div>
+
+    <div class="auth-side">
+      <h2>انضم إلى <span class="gradient">Nexora</span></h2>
+      <p>احصل على:</p>
+      <ul class="auth-features">
+        <li><i class="fas fa-gift"></i> عروض خاصة للأعضاء</li>
+        <li><i class="fas fa-bolt"></i> تتبع فوري للطلبات</li>
+        <li><i class="fas fa-headset"></i> دعم أولوية</li>
+        <li><i class="fas fa-history"></i> حفظ تاريخ مشاريعك</li>
+      </ul>
+    </div>
+  </div>
+</section>
+{% endblock %}

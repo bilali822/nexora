@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}تسجيل الدخول — Nexora{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">Nexora<span>.</span></div>
+        <h1>تسجيل الدخول</h1>
+        <p>أهلاً فيك مرة تانية 👋</p>
+      </div>
+
+      <form method="post" class="auth-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-error">{{ form.non_field_errors|striptags }}</div>
+        {% endif %}
+
+        <div class="field">
+          <label for="{{ form.username.id_for_label }}">
+            <i class="fas fa-user"></i> اسم المستخدم
+          </label>
+          {{ form.username }}
+          {% if form.username.errors %}<small class="error">{{ form.username.errors|striptags }}</small>{% endif %}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.password.id_for_label }}">
+            <i class="fas fa-lock"></i> كلمة السر
+          </label>
+          {{ form.password }}
+          {% if form.password.errors %}<small class="error">{{ form.password.errors|striptags }}</small>{% endif %}
+        </div>
+
+        <button type="submit" class="btn-primary btn-block">
+          <i class="fas fa-sign-in-alt"></i> دخول
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <p>ما عندك حساب؟ <a href="{% url 'accounts:register' %}">أنشئ حساب جديد</a></p>
+      </div>
+    </div>
+
+    <div class="auth-side">
+      <h2>مرحباً بك في <span class="gradient">Nexora</span></h2>
+      <p>سجّل دخولك لتتابع طلباتك، تحمّل مشاريعك، وتدير حسابك بسهولة.</p>
+      <ul class="auth-features">
+        <li><i class="fas fa-check-circle"></i> تتبع طلباتك لحظة بلحظة</li>
+        <li><i class="fas fa-check-circle"></i> إدارة مشاريعك</li>
+        <li><i class="fas fa-check-circle"></i> تحميل الملفات</li>
+        <li><i class="fas fa-check-circle"></i> تواصل مباشر معنا</li>
+      </ul>
+    </div>
+  </div>
+</section>
+{% endblock %}

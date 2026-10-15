@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'adminsortable2',
     'dbbackup',
     'widget_tweaks',
+    'accounts',
     'core',
     'projects',
     'requests_app',
@@ -325,3 +326,8 @@ DEBUG = False
 ALLOWED_HOSTS = ['Mohamad15037.pythonanywhere.com']
 CSRF_TRUSTED_ORIGINS = ['https://Mohamad15037.pythonanywhere.com']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# ========== Authentication ==========
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'accounts:profile'
+LOGOUT_REDIRECT_URL = 'core:home'

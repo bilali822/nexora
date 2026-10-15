@@ -98,7 +98,24 @@
           <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
         </select>
       </form>
-      <a href="{% url 'requests_app:form' %}" class="btn-primary btn-sm">{% trans "اطلب موقعك" %}</a>
+       {% if user.is_authenticated %}
+<div class="user-menu">
+  <button class="user-menu-btn" id="userMenuBtn">
+    <div class="user-menu-avatar">{{ user.username|slice:":1"|upper }}</div>
+    <span class="user-menu-name">{{ user.first_name|default:user.username }}</span>
+    <i class="fas fa-chevron-down" style="font-size:10px;opacity:.6"></i>
+  </button>
+  <div class="user-menu-dropdown" id="userMenuDropdown">
+    <a href="{% url 'accounts:profile' %}"><i class="fas fa-user"></i> ملفي الشخصي</a>
+    <a href="{% url 'requests_app:track' %}"><i class="fas fa-search"></i> تتبع طلب</a>
+    <div class="user-menu-divider"></div>
+    <a href="{% url 'accounts:logout' %}" class="logout"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
+  </div>
+</div>
+{% else %}
+<a href="{% url 'accounts:login' %}" class="btn-ghost btn-sm">دخول</a>
+{% endif %}
+<a href="{% url 'requests_app:form' %}" class="btn-primary btn-sm">{% trans "اطلب موقعك" %}</a>
       <button class="menu-toggle icon-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
     </div>
   </div>

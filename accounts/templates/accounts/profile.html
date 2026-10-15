@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}الملف الشخصي — Nexora{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><span>الملف الشخصي</span>
+    </nav>
+    <h1>أهلاً {{ user.first_name|default:user.username }} 👋</h1>
+    <p>{{ user.email }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="profile-grid">
+      <!-- Sidebar -->
+      <aside class="profile-sidebar">
+        <div class="profile-card">
+          <div class="profile-avatar">
+            {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="{{ user.username }}">
+            {% else %}
+            <div class="avatar-letter">{{ user.username|slice:":1"|upper }}</div>
+            {% endif %}
+          </div>
+          <h3>{{ user.first_name|default:user.username }}</h3>
+          <p class="profile-email">{{ user.email }}</p>
+          {% if profile.company %}<p class="profile-company"><i class="fas fa-building"></i> {{ profile.company }}</p>{% endif %}
+
+          <div class="profile-stats">
+            <div class="pstat">
+              <strong>{{ user_requests.count }}</strong>
+              <span>طلب</span>
+            </div>
+            <div class="pstat">
+              <strong>{{ user.date_joined|date:"Y" }}</strong>
+              <span>عضو من</span>
+            </div>
+          </div>
+
+          <a href="{% url 'accounts:logout' %}" class="btn-ghost btn-block">
+            <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="profile-main">
+        <!-- Tabs -->
+        <div class="profile-tabs">
+          <button class="ptab active" data-tab="info"><i class="fas fa-user"></i> معلوماتي</button>
+          <button class="ptab" data-tab="requests"><i class="fas fa-inbox"></i> طلباتي ({{ user_requests.count }})</button>
+        </div>
+
+        <!-- Tab: Info -->
+        <div class="ptab-content active" data-content="info">
+          <h2>تعديل المعلومات</h2>
+          <form method="post" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="field">
+              <label>{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}<small class="error">{{ field.errors|striptags }}</small>{% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn-primary">
+              <i class="fas fa-save"></i> حفظ التغييرات
+            </button>
+          </form>
+        </div>
+
+        <!-- Tab: Requests -->
+        <div class="ptab-content" data-content="requests">
+          <h2>طلباتي</h2>
+          {% if user_requests %}
+          <div class="requests-list">
+            {% for req in user_requests %}
+            <div class="request-item">
+              <div class="req-header">
+                <div>
+                  <h3>{{ req.get_project_type_display }}</h3>
+                  <p class="req-date">{{ req.created_at|date:"Y-m-d" }}</p>
+                </div>
+                <span class="status-badge status-{{ req.status }}">{{ req.get_status_display }}</span>
+              </div>
+              <div class="req-details">
+                <span><strong>الميزانية:</strong> {{ req.get_budget_display }}</span>
+                <span><strong>رقم التتبع:</strong> <code>{{ req.tracking_id|slice:":8" }}</code></span>
+              </div>
+              <a href="{% url 'requests_app:track' %}?id={{ req.tracking_id }}" class="link-arrow">
+                تتبع الطلب <i class="fas fa-arrow-left"></i>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h3>ما عندك طلبات بعد</h3>
+            <p>ابدأ مشروعك الأول معنا</p>
+            <a href="{% url 'requests_app:form' %}" class="btn-primary">اطلب موقعك الآن</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
