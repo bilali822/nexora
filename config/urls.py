@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('core.urls')),
     path('projects/', include('projects.urls')),
     path('request/', include('requests_app.urls')),
+    path('accounts/', include('allauth.urls')),
     path('accounts/', include('accounts.urls')),
 ]
 

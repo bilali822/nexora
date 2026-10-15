@@ -2245,3 +2245,37 @@ body.sticky-cta-active .scroll-top {
   .user-menu-name { display: none; }
   .user-menu-btn { padding: 4px; border-radius: 50%; }
 }
+
+/* ============ Verification Status ============ */
+.verify-status {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+
+.vstatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.vstatus.ok {
+  background: rgba(16, 185, 129, 0.1);
+  color: #6EE7B7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.vstatus.no {
+  background: rgba(245, 158, 11, 0.1);
+  color: #FCD34D;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.vstatus i { font-size: 14px; }

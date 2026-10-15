@@ -49,6 +49,15 @@ def logout_view(request):
 def profile(request):
     profile_obj, _ = Profile.objects.get_or_create(user=request.user)
 
+    # تحديث حالة التحقق من الإيميل من allauth
+    try:
+        from allauth.account.models import EmailAddress
+        email_address = EmailAddress.objects.get(user=request.user, email=request.user.email)
+        profile_obj.email_verified = email_address.verified
+        profile_obj.save()
+    except Exception:
+        pass
+
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile_obj)
         if form.is_valid():

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}تم التأكيد — Nexora{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="auth-card" style="max-width:480px;margin:0 auto;text-align:center;">
+    <div class="auth-logo">Nexora<span>.</span></div>
+    <div style="font-size:60px;color:var(--success);margin:20px 0;">✓</div>
+    <h1>تم تأكيد بريدك! 🎉</h1>
+    <p>يمكنك الآن استخدام كل ميزات حسابك.</p>
+    <a href="{% url 'accounts:profile' %}" class="btn-primary">الملف الشخصي</a>
+  </div>
+</section>
+{% endblock %}

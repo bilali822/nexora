@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}التحقق من الهاتف — Nexora{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="auth-card" style="max-width:480px;margin:0 auto;">
+    <div class="auth-header">
+      <div class="auth-logo">Nexora<span>.</span></div>
+      <h1>التحقق من رقم الهاتف</h1>
+      <p>أدخل رقم هاتفك لإرسال رمز التحقق</p>
+    </div>
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      <div class="field">
+        <label><i class="fas fa-phone"></i> رقم الهاتف</label>
+        <input type="tel" name="phone" class="form-input" placeholder="+961-XXXXXXXX"
+               required value="{{ profile.phone|default:'' }}">
+      </div>
+      <button type="submit" class="btn-primary btn-block">
+        <i class="fas fa-paper-plane"></i> إرسال الرمز
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -11,6 +11,12 @@ INSTALLED_APPS = [
     'admin_interface',
     'colorfield',
     'django.contrib.admin',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'phone_verify',
+    'phonenumber_field',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -37,6 +43,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -331,3 +338,42 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'accounts:profile'
 LOGOUT_REDIRECT_URL = 'core:home'
+
+# ========== Allauth ==========
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_SESSION_REMEMBER = True
+LOGIN_REDIRECT_URL = 'accounts:profile'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'core:home'
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Nexora] '
+
+# ========== Email (Console للتطوير) ==========
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'Nexora <noreply@nexora.dev>'
+
+# ========== Phone Verify ==========
+PHONE_VERIFICATION = {
+    'BACKEND': 'phone_verify.backends.twilio.TwilioBackend',
+    'OPTIONS': {
+        'SID': config('TWILIO_ACCOUNT_SID', default=''),
+        'SECRET': config('TWILIO_AUTH_TOKEN', default=''),
+        'FROM': config('TWILIO_PHONE_NUMBER', default='+1234567890'),
+        'SANDBOX_TOKEN': '123456',
+    },
+    'TOKEN_LENGTH': 6,
+    'MESSAGE': 'رمز التحقق من Nexora: {token}',
+    'APP_NAME': 'Nexora',
+    'SECURITY_CODE_EXPIRATION_TIME': 15,
+}

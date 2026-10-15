@@ -6,43 +6,25 @@ from .models import Profile
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': 'form-input',
-            'placeholder': 'اسم المستخدم',
-            'autofocus': True,
-        })
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'اسم المستخدم أو البريد', 'autofocus': True})
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-input',
-            'placeholder': 'كلمة السر',
-        })
+        widget=forms.PasswordInput(attrs={'class': 'form-input', 'placeholder': 'كلمة السر'})
     )
 
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
-        widget=forms.EmailInput(attrs={
-            'class': 'form-input',
-            'placeholder': 'you@email.com',
-        })
+        widget=forms.EmailInput(attrs={'class': 'form-input', 'placeholder': 'you@email.com'})
     )
     first_name = forms.CharField(
-        max_length=100,
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-input',
-            'placeholder': 'الاسم الأول',
-        })
+        max_length=100, required=False,
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'الاسم الأول'})
     )
     phone = forms.CharField(
-        max_length=30,
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-input',
-            'placeholder': '+961-XXXXXXXX',
-        })
+        max_length=30, required=False,
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': '+961-XXXXXXXX'})
     )
 
     class Meta:
@@ -51,18 +33,9 @@ class RegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({
-            'class': 'form-input',
-            'placeholder': 'اسم المستخدم',
-        })
-        self.fields['password1'].widget.attrs.update({
-            'class': 'form-input',
-            'placeholder': 'كلمة السر',
-        })
-        self.fields['password2'].widget.attrs.update({
-            'class': 'form-input',
-            'placeholder': 'تأكيد كلمة السر',
-        })
+        self.fields['username'].widget.attrs.update({'class': 'form-input', 'placeholder': 'اسم المستخدم'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-input', 'placeholder': 'كلمة السر'})
+        self.fields['password2'].widget.attrs.update({'class': 'form-input', 'placeholder': 'تأكيد كلمة السر'})
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -70,7 +43,6 @@ class RegisterForm(UserCreationForm):
         user.first_name = self.cleaned_data.get('first_name', '')
         if commit:
             user.save()
-            # حدّث الـ profile
             profile = user.profile
             profile.phone = self.cleaned_data.get('phone', '')
             profile.save()
@@ -78,10 +50,14 @@ class RegisterForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=100, required=False, label='الاسم الأول',
-        widget=forms.TextInput(attrs={'class': 'form-input'}))
-    email = forms.EmailField(required=True, label='البريد الإلكتروني',
-        widget=forms.EmailInput(attrs={'class': 'form-input'}))
+    first_name = forms.CharField(
+        max_length=100, required=False, label='الاسم الأول',
+        widget=forms.TextInput(attrs={'class': 'form-input'})
+    )
+    email = forms.EmailField(
+        required=True, label='البريد الإلكتروني',
+        widget=forms.EmailInput(attrs={'class': 'form-input'})
+    )
 
     class Meta:
         model = Profile

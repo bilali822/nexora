@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}رمز التحقق — Nexora{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="auth-card" style="max-width:480px;margin:0 auto;">
+    <div class="auth-header">
+      <div class="auth-logo">Nexora<span>.</span></div>
+      <h1>أدخل رمز التحقق</h1>
+      <p>تم إرسال رمز من 6 أرقام إلى {{ profile.phone }}</p>
+    </div>
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      <div class="field">
+        <label><i class="fas fa-key"></i> رمز التحقق</label>
+        <input type="text" name="code" class="form-input" placeholder="123456"
+               maxlength="6" required
+               style="text-align:center;font-size:24px;letter-spacing:8px;">
+      </div>
+      <button type="submit" class="btn-primary btn-block">
+        <i class="fas fa-check-circle"></i> تأكيد الرمز
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}
