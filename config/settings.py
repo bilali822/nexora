@@ -204,7 +204,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'nexora.1lebanon@gmail.com'
-EMAIL_HOST_PASSWORD = 'qnbh fqfo iepq grsm'
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = 'Nexora <nexora.1lebanon@gmail.com>'
 SERVER_EMAIL = 'nexora.1lebanon@gmail.com'
 
@@ -223,3 +223,26 @@ DEBUG = False
 ALLOWED_HOSTS = ['nexorastudiomakerwebandapps.pythonanywhere.com', 'localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://nexorastudiomakerwebandapps.pythonanywhere.com']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# ================================================================
+# SECURITY — Enhanced (auto-added)
+# ================================================================
+
+# Clickjacking
+X_FRAME_OPTIONS = 'DENY'
+
+# MIME sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+
+# Referrer
+SECURE_REFERRER_POLICY = 'same-origin'
+
+# Password hashing — PBKDF2 (آمن ومتوافق مع PythonAnywhere)
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+]
+
+# Proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
