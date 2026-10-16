@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django_ratelimit.decorators import ratelimit
 from .forms import WebsitePromptForm
 from .models import GeneratedWebsite
 from .ai_service import generate_website_code
@@ -9,7 +8,6 @@ from .designs import TEMPLATES
 
 
 @login_required
-@ratelimit(key='user', rate='5/h', method='POST', block=True)
 def generate_site_view(request):
     if request.method == 'POST':
         form = WebsitePromptForm(request.POST)
