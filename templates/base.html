@@ -50,7 +50,7 @@
 {% block extra_head %}{% endblock %}
 </head>
 <body>
-<div id="nx-shapes" aria-hidden="true">
+<div id="nx-shapes" aria-hidden="true" style="pointer-events:none;">
   <div class="shape shape-1"></div>
   <div class="shape shape-2"></div>
   <div class="shape shape-3"></div>
@@ -138,7 +138,7 @@
 </div>
 {% endif %}
 
-<main>{% block content %}{% endblock %}</main>
+<main class="site-main">{% block content %}{% endblock %}</main>
 
 <!-- ============ FOOTER ============ -->
 <footer class="footer">

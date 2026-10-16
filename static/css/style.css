@@ -1107,3 +1107,200 @@ textarea { min-height: 100px; resize: vertical; }
 [data-theme="dark"] .logo-mark path {
   stroke: var(--black);
 }
+
+/* ================================================================
+   DECORATIVE LAYERS — Final
+   ================================================================ */
+
+#nx-shapes {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: layout style;
+}
+
+#nx-shapes .shape {
+  position: absolute;
+  pointer-events: none;
+}
+
+#nx-shapes .shape-1 {
+  width: 220px; height: 220px;
+  top: 12%; inset-inline-end: 8%;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: nx-float-1 22s ease-in-out infinite;
+}
+
+#nx-shapes .shape-2 {
+  width: 140px; height: 140px;
+  bottom: 18%; inset-inline-start: 6%;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.45;
+  animation: nx-float-2 28s ease-in-out infinite;
+}
+
+#nx-shapes .shape-3 {
+  width: 8px; height: 8px;
+  top: 28%; inset-inline-start: 22%;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.85;
+}
+
+#nx-shapes .shape-4 {
+  width: 6px; height: 6px;
+  top: 42%; inset-inline-end: 26%;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.75;
+}
+
+#nx-shapes .shape-5 {
+  width: 4px; height: 4px;
+  bottom: 32%; inset-inline-end: 14%;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.9;
+}
+
+#nx-shapes .shape-6 {
+  width: 90px; height: 90px;
+  top: 55%; inset-inline-end: 4%;
+  border: 1px dashed var(--accent);
+  border-radius: 4px;
+  opacity: 0.5;
+  transform: rotate(15deg);
+  animation: nx-rotate-6 40s linear infinite;
+}
+
+#nx-shapes .shape-7 {
+  width: 60px; height: 60px;
+  top: 8%; inset-inline-start: 12%;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.55;
+  animation: nx-float-1 26s ease-in-out infinite reverse;
+}
+
+#nx-shapes .shape-8 {
+  width: 320px; height: 320px;
+  top: -80px; inset-inline-start: -80px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.22;
+  animation: nx-float-2 35s ease-in-out infinite;
+}
+
+#nx-shapes .shape-9 {
+  width: 180px; height: 180px;
+  bottom: 5%; inset-inline-end: 30%;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.35;
+  animation: nx-float-1 30s ease-in-out infinite;
+}
+
+#nx-shapes .shape-10 {
+  width: 12px; height: 12px;
+  top: 60%; inset-inline-start: 8%;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+#nx-shapes .shape-11 {
+  width: 10px; height: 10px;
+  bottom: 25%; inset-inline-end: 18%;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+#nx-shapes .shape-12 {
+  width: 6px; height: 6px;
+  top: 18%; inset-inline-end: 40%;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+@keyframes nx-float-1 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(-15px, 20px, 0) rotate(10deg); }
+}
+
+@keyframes nx-float-2 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(20px, -15px, 0) rotate(-8deg); }
+}
+
+@keyframes nx-rotate-6 {
+  from { transform: rotate(15deg); }
+  to { transform: rotate(375deg); }
+}
+
+/* ================================================================
+   STACKING ORDER — Content above decorative layers
+   ================================================================ */
+
+main {
+  position: relative;
+  z-index: 2;
+}
+
+.navbar {
+  position: sticky;
+  z-index: 100;
+}
+
+.footer {
+  position: relative;
+  z-index: 2;
+}
+
+/* Auth pages */
+.auth-section {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1.5rem 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.auth-container {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.auth-card {
+  position: relative;
+  z-index: 3;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+}
+
+@media (max-width: 900px) {
+  .auth-container { grid-template-columns: 1fr; gap: 2rem; }
+  .auth-section { padding: 4rem 1rem 2rem; }
+  .auth-card { padding: 1.75rem; }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  #nx-shapes .shape { animation: none !important; }
+}
