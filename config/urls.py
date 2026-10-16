@@ -3,7 +3,6 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-from django.views.i18n import set_language
 from core.sitemaps import ProjectSitemap, BlogSitemap, StaticSitemap
 
 sitemaps = {
@@ -22,7 +21,6 @@ admin.site.site_title = 'Nexora Admin'
 admin.site.index_title = 'مرحباً بك في Nexora'
 
 urlpatterns = [
-    path('i18n/setlang/', set_language, name='set_language'),
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
     path('', include('core.urls')),

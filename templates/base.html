@@ -101,20 +101,7 @@
     </nav>
 
     <div class="nav-actions">
-      <form action="{% url 'set_language' %}" method="post" class="lang-switcher">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{{ request.get_full_path }}">
-        <button type="submit" name="language" value="ar" class="lang-btn {% if LANGUAGE_CODE == 'ar' %}is-active{% endif %}">ع</button>
-        <button type="submit" name="language" value="en" class="lang-btn {% if LANGUAGE_CODE == 'en' %}is-active{% endif %}">EN</button>
-      </form>
-      <form action="{% url 'set_language' %}" method="post" class="lang-form">{% csrf_token %}
-        <input name="next" type="hidden" value="{{ request.path }}">
-        <select name="language" onchange="this.form.submit()" class="lang-select">
-          <option value="ar" {% if LANGUAGE_CODE == 'ar' %}selected{% endif %}>ع</option>
-          <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
-        </select>
-      </form>
-       {% if user.is_authenticated %}
+      {% if user.is_authenticated %}
 <div class="user-menu">
   <button class="user-menu-btn" id="userMenuBtn">
     <div class="user-menu-avatar">{{ user.username|slice:":1"|upper }}</div>
