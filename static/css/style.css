@@ -1057,18 +1057,7 @@ textarea { min-height: 100px; resize: vertical; }
 }
 
 /* ============ Dark mode ============ */
-@media (prefers-color-scheme: dark) {
-  html:not([data-theme]) {
-    --bg: var(--black);
-    --bg-elevated: var(--gray-900);
-    --bg-muted: var(--gray-800);
-    --text: var(--white);
-    --text-muted: var(--gray-400);
-    --text-subtle: var(--gray-500);
-    --border: var(--gray-800);
-    --border-strong: var(--gray-700);
-  }
-}
+
 
 /* ============ Logo ============ */
 .logo {
@@ -2493,4 +2482,15 @@ main {
 @media (max-width: 768px) {
   .user-menu-name { display: none; }
   .user-menu-btn { padding: 0.25rem; }
+}
+
+/* ================================================================
+   FORCE LIGHT MODE
+   ================================================================ */
+html {
+  color-scheme: light only;
+}
+
+html[data-theme="dark"] {
+  color-scheme: light only;
 }
