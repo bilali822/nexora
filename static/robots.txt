@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
-Sitemap: https://your-domain.com/sitemap.xml
+Disallow: /nexora-control-2026/
+Disallow: /accounts/
+Disallow: /request/
+Disallow: /payments/
+Sitemap: https://nexorastudiomakerwebandapps.pythonanywhere.com/sitemap.xml

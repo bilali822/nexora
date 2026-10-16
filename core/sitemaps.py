@@ -6,7 +6,7 @@ from projects.models import Project
 
 class ProjectSitemap(Sitemap):
     priority = 0.8
-    changefreq = 'weekly'
+    changefreq = 'monthly'
     def items(self):
         return Project.objects.all()
     def lastmod(self, obj):
@@ -26,7 +26,8 @@ class StaticSitemap(Sitemap):
     priority = 0.5
     changefreq = 'monthly'
     def items(self):
-        return ['core:home', 'core:services', 'core:about', 'core:pricing',
-                'core:blog_list', 'core:contact', 'projects:list']
+        return ['core:home', 'core:about', 'core:services',
+                'core:pricing', 'core:blog_list', 'core:contact',
+                'projects:list']
     def location(self, item):
         return reverse(item)
