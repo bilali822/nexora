@@ -1053,3 +1053,41 @@ textarea { min-height: 100px; resize: vertical; }
     --border-strong: var(--gray-700);
   }
 }
+
+/* ============ Logo ============ */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  letter-spacing: -0.02em;
+  transition: opacity var(--transition);
+}
+
+.logo:hover { opacity: 0.75; }
+
+.logo-mark {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--text);
+  display: block;
+}
+
+.logo-text {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+
+/* في الوضع الداكن، اعكس */
+[data-theme="dark"] .logo-mark rect:first-child {
+  fill: var(--gray-200);
+}
+
+[data-theme="dark"] .logo-mark path {
+  stroke: var(--black);
+}
