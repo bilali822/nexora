@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}التحقق من البريد — Nexora{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="auth-card" style="max-width:520px;margin:0 auto;">
+    <div class="auth-header">
+      <div class="auth-logo">Nexora<span>.</span></div>
+      <h1>التحقق من البريد</h1>
+      <p>اضغط الزر لإرسال رابط التحقق إلى <strong>{{ user.email }}</strong></p>
+    </div>
+
+    {% if messages %}
+    {% for m in messages %}
+    <div class="alert alert-{{ m.tags }}">{{ m }}</div>
+    {% endfor %}
+    {% endif %}
+
+    <form method="post" action="{% url 'accounts:verify_email' %}">
+      {% csrf_token %}
+      <button type="submit" class="btn-primary btn-block">
+        <i class="fas fa-envelope"></i> إرسال رابط التحقق
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p><a href="{% url 'accounts:profile' %}">رجوع للملف الشخصي</a></p>
+    </div>
+  </div>
+</section>
+{% endblock %}
