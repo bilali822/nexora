@@ -188,12 +188,16 @@
       }
     });
 
-    var closeBtn = exitModal.querySelector('.exit-close');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function () {
+    // كل أزرار الإغلاق
+    var closeBtns = exitModal.querySelectorAll('.exit-close');
+    closeBtns.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         exitModal.classList.remove('show');
+        sessionStorage.setItem('exitShown', '1');
       });
-    }
+    });
     exitModal.addEventListener('click', function (e) {
       if (e.target === exitModal) exitModal.classList.remove('show');
     });
@@ -352,3 +356,17 @@
 
   observer.observe(stickyCta, { attributes: true, attributeFilter: ['class'] });
 })();
+
+// ============ Exit Intent NO button ============
+document.addEventListener('DOMContentLoaded', function () {
+  var noBtn = document.getElementById('exitNoBtn');
+  if (noBtn) {
+    noBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var modal = document.getElementById('exitIntentModal');
+      if (modal) modal.classList.remove('show');
+      sessionStorage.setItem('exitShown', '1');
+    });
+  }
+});
