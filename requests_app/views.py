@@ -27,17 +27,25 @@ def request_form(request):
         form = ProjectRequestForm(request.POST, request.FILES)
         if form.is_valid():
             req_obj = form.save()
-                        # إنشاء دفعة OMT تلقائياً
+            # إنشاء دفعة OMT تلقائياً
             try:
                 from billing.models import Payment
+                amount = {
+                    '<500': 99,
+                    '500-1000': 199,
+                    '1000-3000': 499,
+                    '>3000': 999,
+                }.get(req_obj.budget, 99)
                 Payment.objects.create(
                     user=request.user if request.user.is_authenticated else None,
                     project_request=req_obj,
-                    amount=0,
+                    amount=amount,
                     method='omt',
                     status='pending',
                 )
+                print(f'✅ Payment created: ${amount}')
             except Exception as e:
+                print(f'Payment creation error: {e}')
                 print(f'Payment creation error: {e}')
             # ملفات مرفوعة
             for f in request.FILES.getlist('attachments'):
