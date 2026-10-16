@@ -335,11 +335,8 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
-ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_SESSION_REMEMBER = True
@@ -372,3 +369,7 @@ EMAIL_HOST_USER = 'nexora.1lebanon@gmail.com'
 EMAIL_HOST_PASSWORD = 'qnbh fqfo iepq grsm'
 DEFAULT_FROM_EMAIL = 'Nexora <nexora.1lebanon@gmail.com>'
 SERVER_EMAIL = 'nexora.1lebanon@gmail.com'
+
+# ========== Allauth (new API) ==========
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
