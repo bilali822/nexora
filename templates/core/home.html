@@ -6,187 +6,106 @@
 <!-- HERO -->
 <section class="hero">
   <div class="container">
-    <div class="animate">
-      <p class="eyebrow">{% trans "استوديو ويب — بيروت" %}</p>
-    </div>
-    <h1 class="animate delay-1">
-      {% trans "نبني منتجات رقمية" %}<br>
-      <span class="accent-text">{% trans "تبقى في الذاكرة." %}</span>
+    <p class="eyebrow">استوديو مواقع — بيروت</p>
+    <h1>
+      نبني مواقع<br>
+      <em>تبقى في الذاكرة.</em>
     </h1>
-    <p class="animate delay-2">
-      {% trans "من الفكرة إلى الإطلاق — نصنع مواقع وتطبيقات ويب للشركات الجادة. بدون قوالب، بدون اختصارات." %}
+    <p class="hero-lede">
+      نعمل مع شركات جادة تريد موقعاً يشتغل، ليس مجرد واجهة. بدون قوالب، بدون اختصارات.
     </p>
-    <div class="hero-actions animate delay-3">
-      <a href="{% url 'requests_app:form' %}" class="btn-primary">
-        {% trans "ابدأ مشروعك" %} →
-      </a>
-      <a href="{% url 'projects:list' %}" class="btn-ghost">{% trans "الأعمال" %}</a>
+    <div class="hero-actions">
+      <a href="{% url 'requests_app:form' %}" class="btn-primary">ابدأ مشروعك</a>
+      <a href="{% url 'projects:list' %}" class="btn-ghost">الأعمال</a>
     </div>
   </div>
 </section>
 
-<!-- STATS -->
-{% if stats %}
+<!-- STATS — inline minimal -->
 <section class="stats-section">
   <div class="container">
     <div class="stats-grid">
-      {% for s in stats %}
-      <div class="stat-card animate">
-        <div class="stat-value" data-target="{{ s.value }}">{{ s.value }}</div>
-        <div class="stat-label">{{ s.label }}</div>
-      </div>
-      {% endfor %}
+      <div class="stat-card"><div class="stat-value">12</div><div class="stat-label">مشروع في 2025</div></div>
+      <div class="stat-card"><div class="stat-value">4</div><div class="stat-label">عملاء دائمون</div></div>
+      <div class="stat-card"><div class="stat-value">3</div><div class="stat-label">سنوات خبرة</div></div>
+      <div class="stat-card"><div class="stat-value">48h</div><div class="stat-label">متوسط الرد</div></div>
     </div>
   </div>
 </section>
-{% endif %}
 
 <!-- SERVICES -->
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <p class="eyebrow">{% trans "الخدمات" %}</p>
-      <h2>{% trans "ما نبنيه لك" %}</h2>
-      <p>{% trans "حلول عملية مصممة حسب احتياج مشروعك — بدون حشو، بدون فذلكة." %}</p>
+      <p class="eyebrow">الخدمات</p>
+      <h2>ما نبنيه</h2>
     </div>
     <div class="grid">
       {% for s in services %}
-      <a href="{{ s.get_absolute_url }}" class="card card-link animate">
-        <div class="card-icon"><i class="fas {{ s.icon|default:'fa-code' }}"></i></div>
+      <a href="{{ s.get_absolute_url }}" class="card card-link">
+        <div class="card-index">0{{ forloop.counter }}</div>
         <h3>{{ s.title }}</h3>
         <p>{{ s.description }}</p>
-        {% if s.starting_price %}<span class="tag">{% trans "من" %} {{ s.starting_price }}</span>{% endif %}
+        {% if s.starting_price %}<span class="tag">{{ s.starting_price }}</span>{% endif %}
       </a>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- PRICE CALCULATOR -->
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">{% trans "حاسبة التكلفة" %}</p>
-      <h2>{% trans "قدّر ميزانية مشروعك" %}</h2>
-      <p>{% trans "أرقام واضحة، بدون مفاجآت." %}</p>
-    </div>
-    <div class="calculator animate" id="nx-calculator">
-      <div class="calc-row">
-        <label class="calc-label">{% trans "نوع المشروع" %}</label>
-        <select id="calcType" class="form-input" style="max-width:220px">
-          <option value="website">موقع تعريفي</option>
-          <option value="webapp">تطبيق ويب</option>
-          <option value="store">متجر إلكتروني</option>
-          <option value="dashboard">لوحة تحكم</option>
-          <option value="ui">تصميم UI/UX</option>
-        </select>
-      </div>
-      <div class="calc-row" style="display:block">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-          <span class="calc-label">{% trans "عدد الصفحات" %}</span>
-          <span class="calc-value" id="calcPagesLabel">5</span>
-        </div>
-        <input type="range" id="calcPages" min="1" max="30" value="5" class="calc-slider">
-      </div>
-      <div style="margin-top:20px">
-        <div class="calc-label" style="margin-bottom:12px">{% trans "ميزات إضافية" %}</div>
-        <div class="calc-options">
-          <label class="calc-option"><input type="checkbox" data-price="150"> {% trans "تسجيل مستخدمين" %}</label>
-          <label class="calc-option"><input type="checkbox" data-price="200"> {% trans "دفع إلكتروني" %}</label>
-          <label class="calc-option"><input type="checkbox" data-price="100"> {% trans "متعدد اللغات" %}</label>
-          <label class="calc-option"><input type="checkbox" data-price="180"> {% trans "لوحة تحكم" %}</label>
-          <label class="calc-option"><input type="checkbox" data-price="120"> {% trans "SEO متقدم" %}</label>
-          <label class="calc-option"><input type="checkbox" data-price="90"> {% trans "ربط API" %}</label>
-        </div>
-      </div>
-      <div class="calc-total">
-        <span class="label">{% trans "السعر التقديري" %}</span>
-        <span class="value">$0</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- WHY US -->
-{% if why_us %}
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">{% trans "منهجنا" %}</p>
-      <h2>{% trans "كيف نعمل" %}</h2>
-    </div>
-    <div class="grid">
-      {% for w in why_us %}
-      <div class="feature-card animate">
-        <div class="feature-icon"><i class="fas {{ w.icon }}"></i></div>
-        <h3>{{ w.title }}</h3>
-        <p>{{ w.description }}</p>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
-
 <!-- PROCESS -->
-{% if process %}
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <p class="eyebrow">{% trans "خطوات العمل" %}</p>
-      <h2>{% trans "من الطلب إلى الإطلاق" %}</h2>
+      <p class="eyebrow">طريقة العمل</p>
+      <h2>أربع خطوات</h2>
     </div>
     <div class="process-grid">
-      {% for p in process %}
-      <div class="process-step animate">
-        <div class="step-num">{{ p.order|stringformat:"02d" }}</div>
-        <h3>{{ p.title }}</h3>
-        <p>{{ p.description }}</p>
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <h3>المحادثة</h3>
+        <p>نسمع فكرتك ونفهم احتياجك الحقيقي — ليس فقط ما تطلبه.</p>
       </div>
-      {% endfor %}
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <h3>الاقتراح</h3>
+        <p>نرسل عرضاً واضحاً: ما سنبنيه، المدة، والسعر. بدون مفاجآت.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <h3>التنفيذ</h3>
+        <p>نعمل على مراحل. ترى التقدم أسبوعياً، وتعطي ملاحظاتك مباشرة.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <h3>الإطلاق</h3>
+        <p>نطلق الموقع ونتابعه. أي مشكلة في أول شهر، على حسابنا.</p>
+      </div>
     </div>
   </div>
 </section>
-{% endif %}
 
-<!-- FEATURED PROJECTS -->
+<!-- PROJECTS -->
 {% if projects %}
 <section class="section">
   <div class="container">
     <div class="section-head" style="display:flex;justify-content:space-between;align-items:end;max-width:none;">
       <div>
-        <p class="eyebrow">{% trans "الأعمال" %}</p>
-        <h2 style="margin-bottom:0">{% trans "مشاريع مختارة" %}</h2>
+        <p class="eyebrow">الأعمال</p>
+        <h2 style="margin-bottom:0">مشاريع مختارة</h2>
       </div>
-      <a href="{% url 'projects:list' %}" class="link-arrow">
-        {% trans "الكل" %} →
-      </a>
+      <a href="{% url 'projects:list' %}" class="link-arrow">الكل ←</a>
     </div>
     <div class="grid">
       {% for p in projects %}
-      <a href="{{ p.get_absolute_url }}" class="project-card animate">
+      <a href="{{ p.get_absolute_url }}" class="project-card">
         <img src="{{ p.cover.url }}" alt="{{ p.title }}" loading="lazy">
         <div class="project-overlay">
-          <span class="tag">{{ p.get_category_display }}</span>
           <h3>{{ p.title }}</h3>
+          <span>{{ p.get_category_display }}</span>
         </div>
       </a>
       {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- CLIENTS -->
-{% if clients %}
-<section class="clients-section">
-  <div class="container">
-    <p class="clients-title">{% trans "يثقون بنا" %}</p>
-  </div>
-  <div style="overflow:hidden">
-    <div class="clients-marquee">
-      {% for c in clients %}<div class="client-logo">{{ c.name }}</div>{% endfor %}
-      {% for c in clients %}<div class="client-logo">{{ c.name }}</div>{% endfor %}
     </div>
   </div>
 </section>
@@ -197,74 +116,26 @@
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <p class="eyebrow">{% trans "الباقات" %}</p>
-      <h2>{% trans "أسعار واضحة" %}</h2>
-      <p>{% trans "بدون رسوم خفية، بدون التزامات." %}</p>
+      <p class="eyebrow">الباقات</p>
+      <h2>أسعار واضحة</h2>
+      <p>بدون رسوم خفية. تدفع ما نتفق عليه.</p>
     </div>
     <div class="pricing-grid">
       {% for plan in pricing %}
-      <div class="pricing-card {% if plan.is_popular %}popular{% endif %} animate">
-        {% if plan.is_popular %}<span class="pop-badge">{% trans "الأكثر طلباً" %}</span>{% endif %}
+      <div class="pricing-card {% if plan.is_popular %}popular{% endif %}">
         <h3>{{ plan.name }}</h3>
         <p class="tagline">{{ plan.tagline }}</p>
         <div class="price">{{ plan.price }}</div>
         <ul class="plan-features">
           {% for f in plan.features.all %}
           <li class="{% if not f.included %}off{% endif %}">
-            <i class="fas {% if f.included %}fa-check{% else %}fa-minus{% endif %}"></i>
+            <span class="marker">{% if f.included %}✓{% else %}—{% endif %}</span>
             {{ f.text }}
           </li>
           {% endfor %}
         </ul>
-        <a href="{% url 'requests_app:form' %}" class="btn-primary btn-block">{% trans "ابدأ" %}</a>
+        <a href="{% url 'requests_app:form' %}" class="btn-primary btn-block">ابدأ</a>
       </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- TESTIMONIALS -->
-{% if testimonials %}
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">{% trans "آراء العملاء" %}</p>
-      <h2>{% trans "ما يقولونه عنا" %}</h2>
-    </div>
-    <div class="grid">
-      {% for t in testimonials %}
-      <div class="testimonial animate" style="padding:32px">
-        <div class="stars">{% for _ in "12345"|slice:t.rating %}★{% endfor %}</div>
-        <p>"{{ t.message }}"</p>
-        <div class="author">
-          <div class="avatar">{{ t.name|slice:":1" }}</div>
-          <div>
-            <strong>{{ t.name }}</strong>
-            {% if t.role %}<span>{{ t.role }}</span>{% endif %}
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- FAQ -->
-{% if faqs %}
-<section class="section">
-  <div class="container narrow">
-    <div class="section-head">
-      <p class="eyebrow">{% trans "أسئلة شائعة" %}</p>
-      <h2>{% trans "قد يهمك" %}</h2>
-    </div>
-    <div class="faq-list">
-      {% for f in faqs %}
-      <details class="faq-item animate">
-        <summary>{{ f.question }}<i class="fas fa-plus"></i></summary>
-        <p>{{ f.answer }}</p>
-      </details>
       {% endfor %}
     </div>
   </div>
@@ -274,19 +145,16 @@
 <!-- CTA -->
 <section class="cta-section">
   <div class="container">
-    <div class="cta-inner animate">
-      <p class="eyebrow">{% trans "الخطوة التالية" %}</p>
-      <h2>{% trans "لنبنِ شيئاً يستحق." %}</h2>
-      <p>{% trans "احصل على عرض سعر مجاني خلال 24 ساعة." %}</p>
+    <div class="cta-inner">
+      <p class="eyebrow">الخطوة التالية</p>
+      <h2>لنبنِ شيئاً يستحق.</h2>
+      <p>عرض سعر خلال 24 ساعة. بدون التزام.</p>
       <div class="hero-actions">
-        <a href="{% url 'requests_app:form' %}" class="btn-primary">
-          {% trans "ابدأ مشروعك" %} →
-        </a>
-        <a href="https://wa.me/96181274729" class="btn-ghost" target="_blank">
-          {% trans "واتساب" %}
-        </a>
+        <a href="{% url 'requests_app:form' %}" class="btn-primary">ابدأ مشروعك</a>
+        <a href="https://wa.me/96181274729" class="btn-ghost" target="_blank">واتساب</a>
       </div>
     </div>
   </div>
 </section>
+
 {% endblock %}
