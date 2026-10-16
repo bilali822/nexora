@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}معاينة الموقع — Nexora{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <h1>✅ تم توليد موقعك</h1>
+  <p>{{ site.prompt|truncatechars:100 }}</p>
+</div></section>
+
+<section class="section"><div class="container">
+  <div style="background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--border);">
+    <iframe srcdoc="{{ site.generated_code|escape }}" style="width:100%;height:700px;border:none;display:block;" sandbox="allow-scripts"></iframe>
+  </div>
+
+  <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <a href="{% url 'aibuilder:generate' %}" class="btn-primary">
+      <i class="fas fa-plus"></i> ولّد موقعاً آخر
+    </a>
+    <a href="{% url 'aibuilder:my_sites' %}" class="btn-ghost">مواقعي</a>
+  </div>
+
+  <details style="margin-top:24px;">
+    <summary style="cursor:pointer;padding:16px;background:var(--bg-2);border-radius:12px;font-weight:600;">
+      📝 عرض الكود المولّد
+    </summary>
+    <pre style="background:var(--bg-3);padding:20px;border-radius:12px;overflow-x:auto;margin-top:12px;font-size:12px;direction:ltr;text-align:left;">{{ site.generated_code }}</pre>
+  </details>
+</div></section>
+{% endblock %}

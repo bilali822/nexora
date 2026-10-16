@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}مواقعي المولّدة — Nexora{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container"><h1>🤖 مواقعي المولّدة</h1></div></section>
+<section class="section"><div class="container">
+  {% if sites %}
+  <div class="grid">
+    {% for s in sites %}
+    <a href="{% url 'aibuilder:preview_site' s.id %}" class="card card-link">
+      <h3>{{ s.prompt|truncatechars:60 }}</h3>
+      <p class="meta">{{ s.created_at|date:"Y-m-d H:i" }}</p>
+      <span class="tag">{{ s.get_status_display }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state" style="text-align:center;padding:60px;">
+    <i class="fas fa-robot" style="font-size:60px;color:var(--text-3);"></i>
+    <h3>ما عندك مواقع مولّدة بعد</h3>
+    <a href="{% url 'aibuilder:generate' %}" class="btn-primary">ولّد موقعك الأول</a>
+  </div>
+  {% endif %}
+</div></section>
+{% endblock %}

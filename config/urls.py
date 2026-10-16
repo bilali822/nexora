@@ -29,6 +29,7 @@ urlpatterns = [
     path('projects/', include('projects.urls')),
     path('request/', include('requests_app.urls')),
     path('payments/', include('billing.urls')),
+    path('ai/', include('aibuilder.urls')),
     
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('allauth.urls')),

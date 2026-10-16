@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}ولّد موقعك بالذكاء الاصطناعي — Nexora{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container">
+  <h1>🤖 ولّد موقعك بالذكاء الاصطناعي</h1>
+  <p>صف الموقع الذي تحلم به، ودع الذكاء الاصطناعي يبنيه لك</p>
+</div></section>
+
+<section class="section"><div class="container narrow">
+  <div class="project-form">
+    <form method="post">
+      {% csrf_token %}
+      <div class="field">
+        <label>{{ form.prompt.label }}</label>
+        {{ form.prompt }}
+        {% if form.prompt.errors %}<small class="error">{{ form.prompt.errors|striptags }}</small>{% endif %}
+        <small class="help-text">💡 كلما كان الوصف أدق، كان الموقع أجمل</small>
+      </div>
+      <button type="submit" class="btn-primary btn-block">
+        <i class="fas fa-magic"></i> ولّد الموقع الآن
+      </button>
+    </form>
+    <div style="margin-top:24px;text-align:center;">
+      <a href="{% url 'aibuilder:my_sites' %}" class="link-arrow">
+        عرض مواقعي المولّدة <i class="fas fa-arrow-left"></i>
+      </a>
+    </div>
+  </div>
+</div></section>
+{% endblock %}
