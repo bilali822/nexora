@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Nexora — كود التحقق</title>
+</head>
+<body style="margin:0;padding:0;background:#0a0f1c;font-family:'Tajawal',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0f1c;padding:40px 20px;">
+<tr><td align="center">
+
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#131a30;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:1px solid #1f2a4a;">
+
+  <!-- Header -->
+  <tr>
+    <td style="background:linear-gradient(135deg,#5B8CFF,#8B5CF6);padding:40px 30px;text-align:center;">
+      <h1 style="margin:0;font-size:32px;color:#ffffff;font-weight:900;letter-spacing:-1px;">
+        Nexora<span style="color:#22D3EE;">.</span>
+      </h1>
+      <p style="margin:8px 0 0;color:#e0e7ff;font-size:14px;letter-spacing:2px;">
+        مواقع وتطبيقات ويب
+      </p>
+    </td>
+  </tr>
+
+  <!-- Welcome -->
+  <tr>
+    <td style="padding:40px 40px 20px;text-align:right;">
+      <h2 style="margin:0 0 16px;color:#ffffff;font-size:22px;font-weight:700;">
+        مرحباً {% if user_name %}{{ user_name }}{% else %}بك{% endif %} 👋
+      </h2>
+      <p style="margin:0 0 20px;color:#a0aec0;font-size:15px;line-height:1.8;">
+        شكراً لانضمامك إلى <strong style="color:#5B8CFF;">Nexora</strong> — استوديو متخصص بتصميم وتطوير المواقع وتطبيقات الويب الحديثة.
+      </p>
+      <p style="margin:0 0 30px;color:#a0aec0;font-size:15px;line-height:1.8;">
+        نحن هنا لتحويل أفكارك إلى منتجات رقمية حقيقية بتصميم عصري وكود نظيف.
+      </p>
+    </td>
+  </tr>
+
+  <!-- Services -->
+  <tr>
+    <td style="padding:0 40px;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0f1c;border-radius:14px;border:1px solid #1f2a4a;">
+        <tr>
+          <td style="padding:20px 25px;">
+            <p style="margin:0 0 12px;color:#ffffff;font-size:14px;font-weight:700;">
+              ✨ ما نقدمه لك:
+            </p>
+            <p style="margin:0;color:#a0aec0;font-size:13px;line-height:2;">
+              🌐 مواقع تعريفية احترافية<br>
+              💻 تطبيقات ويب حديثة<br>
+              🛒 متاجر إلكترونية متكاملة<br>
+              🎨 تصميم UI/UX عصري<br>
+              ⚡ لوحات تحكم ذكية
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- OTP Code -->
+  <tr>
+    <td style="padding:30px 40px;">
+      <p style="margin:0 0 16px;color:#ffffff;font-size:15px;font-weight:700;text-align:center;">
+        {% if purpose == 'signup' %}🔐 كود تفعيل حسابك{% else %}🔐 كود تسجيل الدخول{% endif %}
+      </p>
+      
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td align="center" style="background:linear-gradient(135deg,rgba(91,140,255,0.1),rgba(139,92,246,0.1));border:2px dashed #8B5CF6;border-radius:16px;padding:25px 20px;">
+            <p style="margin:0;color:#22D3EE;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;">
+              كود التحقق
+            </p>
+            <p style="margin:12px 0 0;color:#ffffff;font-size:42px;font-weight:900;letter-spacing:12px;font-family:'Courier New',monospace;">
+              {{ code }}
+            </p>
+          </td>
+        </tr>
+      </table>
+
+      <p style="margin:20px 0 0;color:#6b7a9e;font-size:13px;text-align:center;">
+        ⏰ الكود صالح لمدة <strong style="color:#F59E0B;">10 دقائق</strong> فقط
+      </p>
+    </td>
+  </tr>
+
+  <!-- Security Notice -->
+  <tr>
+    <td style="padding:0 40px 30px;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(239,68,68,0.08);border-right:3px solid #EF4444;border-radius:10px;">
+        <tr>
+          <td style="padding:14px 18px;">
+            <p style="margin:0;color:#FCA5A5;font-size:13px;line-height:1.6;">
+              ⚠️ <strong>تنبيه أمني:</strong> إذا لم تطلب هذا الكود، تجاهل هذه الرسالة ولا تشاركه مع أي أحد.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- CTA -->
+  <tr>
+    <td style="padding:0 40px 30px;text-align:center;">
+      <p style="margin:0 0 16px;color:#a0aec0;font-size:14px;">
+        جاهز تبدأ مشروعك معنا؟
+      </p>
+      <a href="https://nexorastudiomakerwebandapps.pythonanywhere.com/request/" 
+         style="display:inline-block;background:linear-gradient(135deg,#5B8CFF,#8B5CF6);color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:12px;font-weight:700;font-size:15px;">
+        اطلب موقعك الآن →
+      </a>
+    </td>
+  </tr>
+
+  <!-- Footer -->
+  <tr>
+    <td style="background:#0a0f1c;padding:25px 40px;border-top:1px solid #1f2a4a;text-align:center;">
+      <p style="margin:0 0 8px;color:#a0aec0;font-size:13px;">
+        تابعنا على
+      </p>
+      <p style="margin:0 0 16px;">
+        <a href="https://wa.me/96181274729" style="color:#25D366;text-decoration:none;margin:0 8px;font-size:20px;">💬</a>
+        <a href="#" style="color:#5B8CFF;text-decoration:none;margin:0 8px;font-size:20px;">📷</a>
+        <a href="#" style="color:#0EA5E9;text-decoration:none;margin:0 8px;font-size:20px;">💼</a>
+      </p>
+      <p style="margin:0;color:#6b7a9e;font-size:12px;line-height:1.6;">
+        Nexora — Web & Apps<br>
+        © 2026 جميع الحقوق محفوظة
+      </p>
+    </td>
+  </tr>
+
+</table>
+
+<p style="margin:20px 0 0;color:#6b7a9e;font-size:11px;text-align:center;">
+  تم إرسال هذه الرسالة إلى {{ email }}
+</p>
+
+</td></tr>
+</table>
+</body>
+</html>
