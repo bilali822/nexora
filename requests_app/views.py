@@ -27,6 +27,18 @@ def request_form(request):
         form = ProjectRequestForm(request.POST, request.FILES)
         if form.is_valid():
             req_obj = form.save()
+                        # إنشاء دفعة OMT تلقائياً
+            try:
+                from billing.models import Payment
+                Payment.objects.create(
+                    user=request.user if request.user.is_authenticated else None,
+                    project_request=req_obj,
+                    amount=0,
+                    method='omt',
+                    status='pending',
+                )
+            except Exception as e:
+                print(f'Payment creation error: {e}')
             # ملفات مرفوعة
             for f in request.FILES.getlist('attachments'):
                 ProjectAttachment.objects.create(request=req_obj, file=f)

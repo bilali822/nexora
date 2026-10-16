@@ -2,12 +2,23 @@
 {% block content %}
 <section class="section"><div class="container narrow center">
   <div class="success-icon"><i class="fas fa-check-circle"></i></div>
-  <h1>تم إرسال طلبك!</h1>
-  <p>رقم التتبع الخاص بك:</p>
+  <h1>✅ تم إرسال طلبك!</h1>
+  <p>رقم التتبع:</p>
   <div class="tracking-id">{{ req.tracking_id }}</div>
   <p>احفظ هذا الرقم لتتبع حالة طلبك.</p>
-  <div class="hero-actions" style="justify-content:center">
-    <a href="{% url 'core:home' %}" class="btn-primary">الرئيسية</a>
+
+  {% if req.payment %}
+  <div style="margin:32px 0;padding:24px;background:var(--bg-2);border:1px solid var(--border);border-radius:16px;">
+    <h3 style="margin-bottom:12px;">💳 أكمل الدفع</h3>
+    <p style="color:var(--text-2);margin-bottom:20px;">ادفع عبر OMT Pay لإتمام طلبك</p>
+    <a href="{% url 'billing:omt_payment' req.payment.id %}" class="btn-primary">
+      <i class="fas fa-credit-card"></i> ادفع عبر OMT
+    </a>
+  </div>
+  {% endif %}
+
+  <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <a href="{% url 'core:home' %}" class="btn-ghost">الرئيسية</a>
     <a href="{% url 'requests_app:track' %}?id={{ req.tracking_id }}" class="btn-ghost">تتبع الطلب</a>
   </div>
 </div></section>
