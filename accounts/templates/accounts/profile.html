@@ -32,20 +32,12 @@
           {% if profile.company %}<p class="profile-company"><i class="fas fa-building"></i> {{ profile.company }}</p>{% endif %}
 
           <div class="verify-status">
-            <div class="vstatus {% if profile.email_verified %}ok{% else %}no{% endif %}">
-              <i class="fas {% if profile.email_verified %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
-              البريد {% if profile.email_verified %}موثّق{% else %}غير موثّق{% endif %}
-            </div>
-            <div class="vstatus {% if profile.phone_verified %}ok{% else %}no{% endif %}">
-              <i class="fas {% if profile.phone_verified %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
-              الهاتف {% if profile.phone_verified %}موثّق{% else %}غير موثّق{% endif %}
-            </div>
+            
+            
             {% if not profile.email_verified %}
             <a href="{% url 'accounts:verify_email' %}" class="btn-ghost btn-sm">وثّق بريدك</a>
             {% endif %}
-            {% if not profile.phone_verified %}
-            <a href="{% url 'accounts:verify_phone' %}" class="btn-ghost btn-sm">وثّق هاتفك</a>
-            {% endif %}
+            
           </div>
 
           <div class="profile-stats">
