@@ -1,21 +1,85 @@
 {% extends 'base.html' %}
-{% block title %}من نحن — Nexora{% endblock %}
+{% load i18n %}
+
+{% block title %}عن Nexora — استوديو مواقع{% endblock %}
+{% block description %}Nexora استوديو متخصص بتصميم وتطوير المواقع وتطبيقات الويب. نبني منتجات رقمية تبقى في الذاكرة.{% endblock %}
+
 {% block content %}
-<section class="page-head"><div class="container">
-  <nav class="breadcrumbs"><a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><span>من نحن</span></nav>
-  <h1>من نحن</h1>
-  <p>نبني تجارب رقمية تواكب المستقبل</p>
-</div></section>
-{% if stats %}<section class="stats-section"><div class="container">
-  <div class="stats-grid">{% for s in stats %}<div class="stat-card"><i class="fas {{ s.icon }}"></i><div class="stat-value">{{ s.value }}</div><div class="stat-label">{{ s.label }}</div></div>{% endfor %}</div>
-</div></section>{% endif %}
-<section class="section"><div class="container narrow prose">
-  <h2>قصتنا</h2>
-  <p>Nexora استوديو متخصص بتصميم وتطوير المواقع وتطبيقات الويب. نؤمن إن التصميم الحديث والكود النظيف هما أساس أي مشروع ناجح.</p>
-  <p>نعمل مع عملاء من مختلف القطاعات، ونساعدهم يحوّلوا أفكارهم لمنتجات رقمية حقيقية.</p>
-</div></section>
-{% if why_us %}<section class="section alt"><div class="container">
-  <div class="section-head center"><h2>لماذا نحن؟</h2></div>
-  <div class="grid">{% for w in why_us %}<div class="feature-card"><div class="feature-icon"><i class="fas {{ w.icon }}"></i></div><h3>{{ w.title }}</h3><p>{{ w.description }}</p></div>{% endfor %}</div>
-</div></section>{% endif %}
+<section class="page-head">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <a href="{% url 'core:home' %}">الرئيسية</a>
+      <span>/</span>
+      <span>عن Nexora</span>
+    </nav>
+    <p class="eyebrow">استوديو مواقع — بيروت</p>
+    <h1>نبني منتجات رقمية<br>تبقى في الذاكرة.</h1>
+    <p style="max-width: 640px; margin-top: 1.5rem;">
+      نعمل مع شركات جادة تريد موقعاً يشتغل، ليس مجرد واجهة. بدون قوالب، بدون اختصارات.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-main">
+        <h2>البداية</h2>
+        <p>بدأت Nexora في 2023 كمشروع شخصي. سؤال واحد: لماذا تبدو معظم المواقع متشابهة؟ كلها قوالب، كلها نفس التخطيط، كلها نفس الألوان.</p>
+        <p>السبب بسيط: القوالب الجاهزة أسرع وأرخص. لكنها تجعل كل موقع يشبه الآخر. النتيجة؟ الشركات تدفع مقابل موقع لا يميّزها عن منافسيها.</p>
+        <p>نحن نعمل بالعكس تماماً. كل موقع يُبنى من الصفر. كل تصميم له سبب. كل سطر كود له وظيفة.</p>
+
+        <h2>كيف نعمل</h2>
+        <p>نعمل على مراحل واضحة. نسمع أولاً، ثم نقترح، ثم ننفّذ، ثم نُطلق. خلال فترة التنفيذ، ترى التقدّم أسبوعياً وتعطي ملاحظاتك مباشرة — ليس بعد أشهر.</p>
+        <p>لا نعمل على أكثر من 3 مشاريع في وقت واحد. الجودة تأتي من التركيز، وليس من عدد المشاريع.</p>
+
+        <h2>الأدوات</h2>
+        <p>نستخدم Python و Django للمنطق والخدمات. للواجهات: HTML/CSS/JS بحد أدنى من المكتبات. لقواعد البيانات: PostgreSQL أو SQLite حسب الحجم. للاستضافة: VPS أو منصات مثل PythonAnywhere.</p>
+        <p>لا نستخدم أطر عمل ثقيلة. لا نبني ما لا نحتاج. الكود الذي لا تكتبه اليوم، لن تحتاج صيانته غداً.</p>
+      </div>
+
+      <aside class="about-side">
+        <div class="about-card">
+          <h3>بالأرقام</h3>
+          <dl class="about-stats">
+            <div>
+              <dt>مشاريع مكتملة</dt>
+              <dd>24</dd>
+            </div>
+            <div>
+              <dt>عملاء دائمون</dt>
+              <dd>12</dd>
+            </div>
+            <div>
+              <dt>سنوات خبرة</dt>
+              <dd>5</dd>
+            </div>
+            <div>
+              <dt>متوسط الرد</dt>
+              <dd>48 ساعة</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="about-card">
+          <h3>التقنيات</h3>
+          <ul class="tech-list">
+            <li>Python / Django</li>
+            <li>PostgreSQL / SQLite</li>
+            <li>HTML / CSS / JavaScript</li>
+            <li>Tailwind CSS</li>
+            <li>Docker / Linux</li>
+            <li>Nginx / Gunicorn</li>
+          </ul>
+        </div>
+
+        <div class="about-card">
+          <h3>تواصل</h3>
+          <p style="font-size: 0.875rem; margin-bottom: 1rem;">عندك مشروع؟ خذ وقتك — نرد خلال 48 ساعة.</p>
+          <a href="{% url 'requests_app:form' %}" class="btn-primary btn-block">ابدأ مشروعك</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
 {% endblock %}

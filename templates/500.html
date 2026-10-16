@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}خطأ في السيرفر — Nexora{% endblock %}
+{% block content %}
+<section class="section" style="min-height: 60vh; display: flex; align-items: center;">
+  <div class="container" style="text-align: center; max-width: 560px;">
+    <p class="eyebrow">خطأ 500</p>
+    <h1 style="font-size: clamp(3rem, 8vw, 5rem); margin-bottom: 1.5rem;">خطأ في السيرفر.</h1>
+    <p style="color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1.0625rem;">حدث خطأ غير متوقع. نحن نعمل على إصلاحه.</p>
+    <a href="{% url 'core:home' %}" class="btn-primary">العودة للرئيسية</a>
+  </div>
+</section>
+{% endblock %}

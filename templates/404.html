@@ -1,9 +1,17 @@
 {% extends 'base.html' %}
+{% block title %}الصفحة غير موجودة — Nexora{% endblock %}
 {% block content %}
-<section class="section center"><div class="container">
-  <h1 style="font-size:120px;background:linear-gradient(135deg,#5B8CFF,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">404</h1>
-  <h2>الصفحة غير موجودة</h2>
-  <p>الصفحة اللي بتدور عليها ما موجودة.</p>
-  <a href="{% url 'core:home' %}" class="btn-primary">الرئيسية</a>
-</div></section>
+<section class="section" style="min-height: 60vh; display: flex; align-items: center;">
+  <div class="container" style="text-align: center; max-width: 560px;">
+    <p class="eyebrow">خطأ 404</p>
+    <h1 style="font-size: clamp(3rem, 8vw, 5rem); margin-bottom: 1.5rem;">الصفحة غير موجودة.</h1>
+    <p style="color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1.0625rem;">
+      الرابط الذي تبحث عنه غُيّر أو حُذف. تحقق من العنوان، أو عد للرئيسية.
+    </p>
+    <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+      <a href="{% url 'core:home' %}" class="btn-primary">العودة للرئيسية</a>
+      <a href="{% url 'core:contact' %}" class="btn-ghost">تواصل معنا</a>
+    </div>
+  </div>
+</section>
 {% endblock %}
