@@ -2472,16 +2472,7 @@ main {
 /* ================================================================
    FORCE LIGHT MODE
    ================================================================ */
-html {
-  color-scheme: light only;
-}
-
-html[data-theme="dark"] {
-  color-scheme: light only;
-}
-
-
-
+html { color-scheme: light; }
 /* ================================================================
    ABOUT PAGE
    ================================================================ */
@@ -2584,7 +2575,6 @@ html[data-theme="dark"] {
   .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .about-side { position: static; }
 }
-
 
 /* ================================================================
    TRUST BADGES
