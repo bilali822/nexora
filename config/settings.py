@@ -374,3 +374,12 @@ SERVER_EMAIL = 'nexora.1lebanon@gmail.com'
 # ========== Allauth (new API) ==========
 ACCOUNT_LOGIN_METHODS = {'email', 'username'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+
+# ========== PRODUCTION (PythonAnywhere) ==========
+import os
+_env_host = os.environ.get('PYTHONANYWHERE_DOMAIN', '')
+if _env_host:
+    DEBUG = False
+    ALLOWED_HOSTS = [_env_host, 'localhost', '127.0.0.1']
+    CSRF_TRUSTED_ORIGINS = [f'https://{_env_host}']
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
