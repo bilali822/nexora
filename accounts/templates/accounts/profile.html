@@ -4,120 +4,190 @@
 {% block title %}الملف الشخصي — Nexora{% endblock %}
 
 {% block content %}
-<section class="page-head">
+<section class="profile-section">
   <div class="container">
-    <nav class="breadcrumbs">
-      <a href="{% url 'core:home' %}">الرئيسية</a><span>/</span><span>الملف الشخصي</span>
-    </nav>
-    <h1>أهلاً {{ user.first_name|default:user.username }} 👋</h1>
-    <p>{{ user.email }}</p>
-  </div>
-</section>
 
-<section class="section">
-  <div class="container">
-    <div class="profile-grid">
+    <!-- Header -->
+    <header class="profile-header">
+      <nav class="breadcrumbs">
+        <a href="{% url 'core:home' %}">الرئيسية</a>
+        <span>/</span>
+        <span>الملف الشخصي</span>
+      </nav>
+
+      <div class="profile-header-main">
+        <div class="profile-header-avatar">
+          {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="{{ user.username }}">
+          {% else %}
+            {{ user.username|slice:":1"|upper }}
+          {% endif %}
+        </div>
+        <div>
+          <h1>{{ user.first_name|default:user.username }}</h1>
+          <p class="profile-header-email">{{ user.email }}</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Grid -->
+    <div class="profile-layout">
+
       <!-- Sidebar -->
       <aside class="profile-sidebar">
-        <div class="profile-card">
-          <div class="profile-avatar">
-            {% if profile.avatar %}
-            <img src="{{ profile.avatar.url }}" alt="{{ user.username }}">
-            {% else %}
-            <div class="avatar-letter">{{ user.username|slice:":1"|upper }}</div>
-            {% endif %}
-          </div>
-          <h3>{{ user.first_name|default:user.username }}</h3>
-          <p class="profile-email">{{ user.email }}</p>
-          {% if profile.company %}<p class="profile-company"><i class="fas fa-building"></i> {{ profile.company }}</p>{% endif %}
-
-          <div class="verify-status">
-            
-            
-            {% if not profile.email_verified %}
-            <a href="{% url 'accounts:verify_email' %}" class="btn-ghost btn-sm">وثّق بريدك</a>
-            {% endif %}
-            
-          </div>
-
+        <div class="profile-sidebar-card">
           <div class="profile-stats">
-            <div class="pstat">
+            <div>
               <strong>{{ user_requests.count }}</strong>
               <span>طلب</span>
             </div>
-            <div class="pstat">
+            <div>
               <strong>{{ user.date_joined|date:"Y" }}</strong>
               <span>عضو من</span>
             </div>
           </div>
 
-          <a href="{% url 'accounts:logout' %}" class="btn-ghost btn-block">
+          <div class="profile-verify">
+            <div class="verify-row {% if profile.email_verified %}ok{% else %}pending{% endif %}">
+              <span class="verify-icon">{% if profile.email_verified %}✓{% else %}○{% endif %}</span>
+              البريد الإلكتروني
+            </div>
+          </div>
+
+          <a href="{% url 'accounts:logout' %}" class="btn-ghost btn-block btn-sm">
             <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
           </a>
         </div>
       </aside>
 
-      <!-- Main Content -->
+      <!-- Main -->
       <div class="profile-main">
+
         <!-- Tabs -->
-        <div class="profile-tabs">
-          <button class="ptab active" data-tab="info"><i class="fas fa-user"></i> معلوماتي</button>
-          <button class="ptab" data-tab="requests"><i class="fas fa-inbox"></i> طلباتي ({{ user_requests.count }})</button>
-        </div>
+        <nav class="profile-tabs" role="tablist">
+          <button class="profile-tab is-active" data-tab="info" type="button">
+            معلوماتي
+          </button>
+          <button class="profile-tab" data-tab="requests" type="button">
+            طلباتي
+            {% if user_requests.count %}<span class="tab-count">{{ user_requests.count }}</span>{% endif %}
+          </button>
+        </nav>
 
         <!-- Tab: Info -->
-        <div class="ptab-content active" data-content="info">
-          <h2>تعديل المعلومات</h2>
+        <div class="profile-panel is-active" data-panel="info">
+          <header class="profile-panel-head">
+            <h2>تعديل المعلومات</h2>
+            <p>حدّث بياناتك الشخصية</p>
+          </header>
+
           <form method="post" enctype="multipart/form-data" class="profile-form">
             {% csrf_token %}
-            {% for field in form %}
+
             <div class="field">
-              <label>{{ field.label }}</label>
-              {{ field }}
-              {% if field.errors %}<small class="error">{{ field.errors|striptags }}</small>{% endif %}
+              <label for="{{ form.first_name.id_for_label }}">الاسم الأول</label>
+              {{ form.first_name }}
+              {% if form.first_name.errors %}<small class="error">{{ form.first_name.errors|striptags }}</small>{% endif %}
             </div>
-            {% endfor %}
-            <button type="submit" class="btn-primary">
-              <i class="fas fa-save"></i> حفظ التغييرات
-            </button>
+
+            <div class="field">
+              <label for="{{ form.email.id_for_label }}">البريد الإلكتروني</label>
+              {{ form.email }}
+              {% if form.email.errors %}<small class="error">{{ form.email.errors|striptags }}</small>{% endif %}
+            </div>
+
+            <div class="field">
+              <label for="{{ form.company.id_for_label }}">الشركة</label>
+              {{ form.company }}
+              {% if form.company.errors %}<small class="error">{{ form.company.errors|striptags }}</small>{% endif %}
+            </div>
+
+            <div class="field">
+              <label for="{{ form.bio.id_for_label }}">نبذة عنك</label>
+              {{ form.bio }}
+              {% if form.bio.errors %}<small class="error">{{ form.bio.errors|striptags }}</small>{% endif %}
+            </div>
+
+            <div class="field">
+              <label for="{{ form.avatar.id_for_label }}">الصورة الشخصية</label>
+              {{ form.avatar }}
+              {% if form.avatar.errors %}<small class="error">{{ form.avatar.errors|striptags }}</small>{% endif %}
+            </div>
+
+            <div class="profile-actions">
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-check"></i> حفظ التغييرات
+              </button>
+            </div>
           </form>
         </div>
 
         <!-- Tab: Requests -->
-        <div class="ptab-content" data-content="requests">
-          <h2>طلباتي</h2>
+        <div class="profile-panel" data-panel="requests">
+          <header class="profile-panel-head">
+            <h2>طلباتي</h2>
+            <p>تابع طلباتك الحالية والسابقة</p>
+          </header>
+
           {% if user_requests %}
-          <div class="requests-list">
-            {% for req in user_requests %}
-            <div class="request-item">
-              <div class="req-header">
-                <div>
-                  <h3>{{ req.get_project_type_display }}</h3>
-                  <p class="req-date">{{ req.created_at|date:"Y-m-d" }}</p>
-                </div>
-                <span class="status-badge status-{{ req.status }}">{{ req.get_status_display }}</span>
-              </div>
-              <div class="req-details">
-                <span><strong>الميزانية:</strong> {{ req.get_budget_display }}</span>
-                <span><strong>رقم التتبع:</strong> <code>{{ req.tracking_id|slice:":8" }}</code></span>
-              </div>
-              <a href="{% url 'requests_app:track' %}?id={{ req.tracking_id }}" class="link-arrow">
-                تتبع الطلب <i class="fas fa-arrow-left"></i>
-              </a>
+            <div class="requests-list">
+              {% for req in user_requests %}
+                <article class="request-card">
+                  <div class="request-card-head">
+                    <div>
+                      <h3>{{ req.get_project_type_display }}</h3>
+                      <p class="request-card-date">{{ req.created_at|date:"Y-m-d" }}</p>
+                    </div>
+                    <span class="status status-{{ req.status }}">{{ req.get_status_display }}</span>
+                  </div>
+
+                  <dl class="request-meta">
+                    <div>
+                      <dt>الميزانية</dt>
+                      <dd>{{ req.get_budget_display }}</dd>
+                    </div>
+                    <div>
+                      <dt>رقم التتبع</dt>
+                      <dd><code>{{ req.tracking_id|slice:":8" }}</code></dd>
+                    </div>
+                  </dl>
+
+                  <a href="{% url 'requests_app:track' %}?id={{ req.tracking_id }}" class="link-arrow">
+                    تتبع الطلب <span aria-hidden="true">←</span>
+                  </a>
+                </article>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
           {% else %}
-          <div class="empty-state">
-            <i class="fas fa-inbox"></i>
-            <h3>ما عندك طلبات بعد</h3>
-            <p>ابدأ مشروعك الأول معنا</p>
-            <a href="{% url 'requests_app:form' %}" class="btn-primary">اطلب موقعك الآن</a>
-          </div>
+            <div class="empty-state">
+              <h3>ما عندك طلبات بعد</h3>
+              <p>ابدأ مشروعك الأول معنا</p>
+              <a href="{% url 'requests_app:form' %}" class="btn-primary">اطلب موقعك الآن</a>
+            </div>
           {% endif %}
         </div>
+
       </div>
     </div>
+
   </div>
 </section>
+
+<script>
+(function () {
+  var tabs = document.querySelectorAll('.profile-tab');
+  var panels = document.querySelectorAll('.profile-panel');
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var target = this.dataset.tab;
+      tabs.forEach(function (t) { t.classList.remove('is-active'); });
+      panels.forEach(function (p) { p.classList.remove('is-active'); });
+      this.classList.add('is-active');
+      var panel = document.querySelector('.profile-panel[data-panel="' + target + '"]');
+      if (panel) panel.classList.add('is-active');
+    });
+  });
+})();
+</script>
 {% endblock %}
