@@ -2279,3 +2279,29 @@ body.sticky-cta-active .scroll-top {
 }
 
 .vstatus i { font-size: 14px; }
+
+/* ============ Hide default cursor ============ */
+@media (hover: hover) and (pointer: fine) {
+  body,
+  body * {
+    cursor: none !important;
+  }
+  
+  /* خلّي الحقول تستخدم المؤشر العادي للكتابة */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="date"],
+  textarea,
+  select {
+    cursor: text !important;
+  }
+  
+  /* للـ select */
+  select {
+    cursor: pointer !important;
+  }
+}
