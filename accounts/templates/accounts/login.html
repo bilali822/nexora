@@ -1,8 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
-
 {% block title %}تسجيل الدخول — Nexora{% endblock %}
-
 {% block content %}
 <section class="auth-section">
   <div class="auth-container">
@@ -10,30 +7,25 @@
       <div class="auth-header">
         <div class="auth-logo">Nexora<span>.</span></div>
         <h1>تسجيل الدخول</h1>
-        <p>أهلاً فيك مرة تانية 👋</p>
+        <p>رح نرسللك رمز تحقق 📧</p>
       </div>
+
+      {% if messages %}
+        {% for m in messages %}
+          <div class="alert alert-{{ m.tags }}">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
 
       <form method="post" class="auth-form">
         {% csrf_token %}
-
-        {% if form.non_field_errors %}
-        <div class="alert alert-error">{{ form.non_field_errors|striptags }}</div>
-        {% endif %}
-
         <div class="field">
-          <label for="{{ form.username.id_for_label }}">
-            <i class="fas fa-user"></i> اسم المستخدم
-          </label>
-          {{ form.username }}
-          {% if form.username.errors %}<small class="error">{{ form.username.errors|striptags }}</small>{% endif %}
+          <label><i class="fas fa-user"></i> اسم المستخدم أو الإيميل</label>
+          <input type="text" name="username" class="form-input" placeholder="اسم المستخدم" required autofocus>
         </div>
 
         <div class="field">
-          <label for="{{ form.password.id_for_label }}">
-            <i class="fas fa-lock"></i> كلمة السر
-          </label>
-          {{ form.password }}
-          {% if form.password.errors %}<small class="error">{{ form.password.errors|striptags }}</small>{% endif %}
+          <label><i class="fas fa-lock"></i> كلمة السر</label>
+          <input type="password" name="password" class="form-input" placeholder="كلمة السر" required>
         </div>
 
         <button type="submit" class="btn-primary btn-block">
@@ -42,18 +34,18 @@
       </form>
 
       <div class="auth-footer">
-        <p>ما عندك حساب؟ <a href="{% url 'accounts:register' %}">أنشئ حساب جديد</a></p>
+        <p>ما عندك حساب؟ <a href="{% url 'accounts:register' %}">أنشئ حساب</a></p>
       </div>
     </div>
 
     <div class="auth-side">
-      <h2>مرحباً بك في <span class="gradient">Nexora</span></h2>
-      <p>سجّل دخولك لتتابع طلباتك، تحمّل مشاريعك، وتدير حسابك بسهولة.</p>
+      <h2>مرحباً في <span class="gradient">Nexora</span></h2>
+      <p>سجّل دخولك بأمان مع رمز التحقق</p>
       <ul class="auth-features">
-        <li><i class="fas fa-check-circle"></i> تتبع طلباتك لحظة بلحظة</li>
-        <li><i class="fas fa-check-circle"></i> إدارة مشاريعك</li>
-        <li><i class="fas fa-check-circle"></i> تحميل الملفات</li>
-        <li><i class="fas fa-check-circle"></i> تواصل مباشر معنا</li>
+        <li><i class="fas fa-shield-alt"></i> حماية ثنائية</li>
+        <li><i class="fas fa-envelope"></i> رمز يُرسل للإيميل</li>
+        <li><i class="fas fa-clock"></i> الرمز صالح 10 دقائق</li>
+        <li><i class="fas fa-lock"></i> بياناتك آمنة</li>
       </ul>
     </div>
   </div>

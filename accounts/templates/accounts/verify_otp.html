@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}رمز التحقق — Nexora{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="auth-card" style="max-width:480px;margin:0 auto;">
+    <div class="auth-header">
+      <div class="auth-logo">Nexora<span>.</span></div>
+      <h1>🔐 رمز التحقق</h1>
+      <p>تم إرسال رمز من 6 أرقام إلى</p>
+      <p style="font-weight:bold;color:var(--accent);margin-top:6px;">{{ email }}</p>
+    </div>
+
+    {% if messages %}
+      {% for m in messages %}
+        <div class="alert alert-{{ m.tags }}">{{ m }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      <div class="field">
+        <label><i class="fas fa-key"></i> الرمز (6 أرقام)</label>
+        <input type="text" name="code" class="form-input" placeholder="123456"
+               maxlength="6" required pattern="[0-9]{6}"
+               inputmode="numeric" autocomplete="one-time-code"
+               style="text-align:center;font-size:32px;letter-spacing:12px;font-weight:bold;"
+               autofocus>
+      </div>
+
+      <button type="submit" class="btn-primary btn-block">
+        <i class="fas fa-check-circle"></i> تحقق وادخل
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <form method="post" action="{% url 'accounts:resend_otp' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" style="background:none;border:none;color:var(--accent);cursor:pointer;font-weight:600;font-family:inherit;">
+          <i class="fas fa-redo"></i> إعادة إرسال الرمز
+        </button>
+      </form>
+      <p style="margin-top:12px;color:var(--text-3);font-size:12px;">
+        ⏰ الرمز صالح لمدة 10 دقائق
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}
