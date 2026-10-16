@@ -383,3 +383,8 @@ if _env_host:
     ALLOWED_HOSTS = [_env_host, 'localhost', '127.0.0.1']
     CSRF_TRUSTED_ORIGINS = [f'https://{_env_host}']
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+DEBUG = False
+ALLOWED_HOSTS = ['nexorastudiomakerwebandapps.pythonanywhere.com', 'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://nexorastudiomakerwebandapps.pythonanywhere.com']
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
