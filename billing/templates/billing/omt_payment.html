@@ -1,20 +1,189 @@
 {% extends 'base.html' %}
 {% block title %}الدفع عبر OMT Pay — Nexora{% endblock %}
 {% block content %}
-<section class="page-head"><div class="container"><h1>💳 الدفع عبر OMT Pay</h1></div></section>
+<section class="page-head"><div class="container">
+  <h1>💳 الدفع عبر OMT Pay</h1>
+  <p>أكمل الدفع بأمان</p>
+</div></section>
+
 <section class="section"><div class="container narrow">
-  <div class="payment-steps">
-    <div class="step-card"><h3>1. افتح تطبيق OMT Pay</h3><p>اختر "تحويل الأموال"</p></div>
-    <div class="step-card"><h3>2. حوّل المبلغ</h3><p>حوّل <strong>${{ payment.amount }}</strong> إلى:</p><div class="omt-number">+961 81 274 729</div></div>
-    <div class="step-card"><h3>3. احصل على الرقم المرجعي</h3><p>رح يوصلك رقم من OMT</p></div>
-    <div class="step-card"><h3>4. أدخل الرقم المرجعي</h3><p>عبّي الفورم تحت</p></div>
+
+  <!-- Amount -->
+  <div class="payment-amount-box">
+    <span>المبلغ المطلوب</span>
+    <strong>${{ payment.amount }} {{ payment.currency }}</strong>
   </div>
+
+  <!-- Steps -->
+  <div class="payment-steps">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h3>افتح تطبيق OMT Pay</h3>
+      <p>اختر "تحويل الأموال"</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h3>حوّل المبلغ</h3>
+      <p>حوّل <strong>${{ payment.amount }}</strong> إلى:</p>
+      <div class="omt-number">+961 81 274 729</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h3>احصل على الرقم المرجعي</h3>
+      <p>رح يوصلك رقم من OMT (مثال: OMT123456789)</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <h3>أدخل الرقم</h3>
+      <p>عبّي الفورم تحت — كل الحقول مطلوبة</p>
+    </div>
+  </div>
+
+  <!-- Form -->
   <div class="payment-form-box">
-    <h3>📝 أدخل معلومات الدفع</h3>
-    <form method="post" class="project-form">{% csrf_token %}
-      {% for field in form %}<div class="field"><label>{{ field.label }}</label>{{ field }}</div>{% endfor %}
-      <button type="submit" class="btn-primary btn-block">إرسال رقم الدفع</button>
+    <h3>📝 معلومات الدفع</h3>
+    <p style="color:var(--text-3);font-size:13px;margin-bottom:20px;">
+      ⚠️ كل الحقول مطلوبة — تأكد من صحة البيانات
+    </p>
+
+    {% if form.non_field_errors %}
+    <div class="alert alert-error">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <form method="post" id="paymentForm" novalidate>
+      {% csrf_token %}
+
+      <div class="field">
+        <label>{{ form.omt_reference.label }} <span style="color:#EF4444">*</span></label>
+        {{ form.omt_reference }}
+        {% if form.omt_reference.errors %}
+          <small class="error">{{ form.omt_reference.errors|striptags }}</small>
+        {% endif %}
+        <small class="help-text">{{ form.omt_reference.help_text }}</small>
+      </div>
+
+      <div class="field">
+        <label>{{ form.omt_phone.label }} <span style="color:#EF4444">*</span></label>
+        {{ form.omt_phone }}
+        {% if form.omt_phone.errors %}
+          <small class="error">{{ form.omt_phone.errors|striptags }}</small>
+        {% endif %}
+        <small class="help-text">{{ form.omt_phone.help_text }}</small>
+      </div>
+
+      <div class="field">
+        <label>{{ form.notes.label }}</label>
+        {{ form.notes }}
+        {% if form.notes.errors %}
+          <small class="error">{{ form.notes.errors|striptags }}</small>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn-primary btn-block" id="submitBtn" disabled>
+        <i class="fas fa-paper-plane"></i> إرسال للمراجعة
+      </button>
+
+      <p style="text-align:center;color:var(--text-3);font-size:12px;margin-top:12px;">
+        🔒 بياناتك محمية — رح نتحقق يدوياً خلال 24 ساعة
+      </p>
     </form>
   </div>
+
 </div></section>
+
+<style>
+.payment-amount-box {
+  background: linear-gradient(135deg, #5B8CFF, #8B5CF6);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  margin-bottom: 32px;
+  color: #fff;
+}
+.payment-amount-box span {
+  display: block;
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+.payment-amount-box strong {
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+.payment-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.step-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+.step-num {
+  width: 36px;
+  height: 36px;
+  background: var(--grad);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.step-card h3 { font-size: 15px; margin-bottom: 6px; }
+.step-card p { font-size: 13px; color: var(--text-2); }
+.omt-number {
+  background: var(--bg-3);
+  border: 2px dashed var(--accent);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--accent);
+  margin-top: 12px;
+  letter-spacing: 1px;
+}
+.payment-form-box {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+}
+.payment-form-box h3 { margin-bottom: 8px; }
+.help-text { color: var(--text-3); font-size: 12px; display: block; margin-top: 4px; }
+.error { color: #EF4444; font-size: 13px; display: block; margin-top: 4px; }
+#submitBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+
+<script>
+(function() {
+  var form = document.getElementById('paymentForm');
+  var btn = document.getElementById('submitBtn');
+  var ref = form.querySelector('input[name="omt_reference"]');
+  var phone = form.querySelector('input[name="omt_phone"]');
+
+  function check() {
+    var ok = ref.value.trim().length >= 6 && phone.value.trim().length >= 7;
+    btn.disabled = !ok;
+  }
+
+  ref.addEventListener('input', check);
+  phone.addEventListener('input', check);
+
+  form.addEventListener('submit', function(e) {
+    if (btn.disabled) {
+      e.preventDefault();
+      return false;
+    }
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+  });
+})();
+</script>
 {% endblock %}
