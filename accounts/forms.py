@@ -4,14 +4,17 @@ from django.contrib.auth.models import User
 from .models import Profile
 
 
+INPUT = {'class': 'form-input'}
+
+
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
-        widget=forms.EmailInput(attrs={'class': 'form-input', 'placeholder': 'you@email.com'})
+        widget=forms.EmailInput(attrs={**INPUT, 'placeholder': 'you@email.com', 'autocomplete': 'email'})
     )
     first_name = forms.CharField(
         max_length=100, required=False,
-        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'الاسم الأول'})
+        widget=forms.TextInput(attrs={**INPUT, 'placeholder': 'الاسم الأول', 'autocomplete': 'given-name'})
     )
 
     class Meta:
@@ -20,9 +23,15 @@ class RegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({'class': 'form-input'})
-        self.fields['password1'].widget.attrs.update({'class': 'form-input'})
-        self.fields['password2'].widget.attrs.update({'class': 'form-input'})
+        self.fields['username'].widget.attrs.update({
+            **INPUT, 'placeholder': 'اسم المستخدم', 'autocomplete': 'username'
+        })
+        self.fields['password1'].widget.attrs.update({
+            **INPUT, 'placeholder': 'كلمة السر', 'autocomplete': 'new-password'
+        })
+        self.fields['password2'].widget.attrs.update({
+            **INPUT, 'placeholder': 'تأكيد كلمة السر', 'autocomplete': 'new-password'
+        })
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -33,21 +42,41 @@ class RegisterForm(UserCreationForm):
         return user
 
 
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            **INPUT, 'placeholder': 'اسم المستخدم', 'autofocus': True,
+            'autocomplete': 'username'
+        })
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            **INPUT, 'placeholder': 'كلمة السر',
+            'autocomplete': 'current-password'
+        })
+    )
+
+
 class ProfileForm(forms.ModelForm):
     first_name = forms.CharField(
         max_length=100, required=False, label='الاسم الأول',
-        widget=forms.TextInput(attrs={'class': 'form-input'})
+        widget=forms.TextInput(attrs={**INPUT, 'autocomplete': 'given-name'})
     )
     email = forms.EmailField(
         required=True, label='البريد الإلكتروني',
-        widget=forms.EmailInput(attrs={'class': 'form-input'})
+        widget=forms.EmailInput(attrs={**INPUT, 'autocomplete': 'email'})
     )
 
     class Meta:
         model = Profile
         fields = ['company', 'bio', 'avatar']
         widgets = {
-            'company': forms.TextInput(attrs={'class': 'form-input'}),
-            'bio': forms.Textarea(attrs={'class': 'form-input', 'rows': 4}),
-            'avatar': forms.FileInput(attrs={'class': 'form-input'}),
+            'company': forms.TextInput(attrs={**INPUT, 'placeholder': 'اسم الشركة (اختياري)'}),
+            'bio': forms.Textarea(attrs={**INPUT, 'rows': 4, 'placeholder': 'نبذة قصيرة عنك...'}),
+            'avatar': forms.FileInput(attrs={**INPUT}),
+        }
+        labels = {
+            'company': 'الشركة',
+            'bio': 'نبذة عنك',
+            'avatar': 'الصورة الشخصية',
         }
