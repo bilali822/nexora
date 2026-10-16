@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'dbbackup',
     'widget_tweaks',
     'accounts',
+    'billing',
     'core',
     'projects',
     'requests_app',

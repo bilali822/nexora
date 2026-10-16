@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-head"><div class="container"><h1>💳 مدفوعاتي</h1></div></section>
+<section class="section"><div class="container">
+  {% if payments %}<div class="grid">{% for p in payments %}
+    <div class="card"><h3>${{ p.amount }}</h3><p>{{ p.get_method_display }} — {{ p.get_status_display }}</p></div>
+  {% endfor %}</div>{% else %}<p>ما عندك مدفوعات.</p>{% endif %}
+</div></section>
+{% endblock %}
