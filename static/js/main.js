@@ -347,3 +347,51 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
+/* ================================================================
+   USER MENU — Dropdown (standalone, resilient)
+   ================================================================ */
+(function () {
+  'use strict';
+
+  function initUserMenu() {
+    var btn = document.getElementById('userMenuBtn');
+    var dropdown = document.getElementById('userMenuDropdown');
+
+    if (!btn || !dropdown) return;
+
+    // منع تسجيل مستمعين متعددين
+    if (btn.dataset.menuInit === '1') return;
+    btn.dataset.menuInit = '1';
+
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var isOpen = dropdown.classList.toggle('show');
+      var wrapper = btn.closest('.user-menu');
+      if (wrapper) wrapper.classList.toggle('is-open', isOpen);
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('show');
+        var wrapper = btn.closest('.user-menu');
+        if (wrapper) wrapper.classList.remove('is-open');
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        dropdown.classList.remove('show');
+        var wrapper = btn.closest('.user-menu');
+        if (wrapper) wrapper.classList.remove('is-open');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initUserMenu);
+  } else {
+    initUserMenu();
+  }
+})();
