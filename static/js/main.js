@@ -15,29 +15,6 @@
     setTimeout(function () { loader.classList.add('hidden'); }, 3000);
   }
 
-  // ============ 2. Theme Toggle ============
-  var html = document.documentElement;
-  var themeBtn = document.getElementById('themeToggle');
-  var saved = localStorage.getItem('theme') || 'dark';
-  html.setAttribute('data-theme', saved);
-  updateThemeIcon(saved);
-
-  if (themeBtn) {
-    themeBtn.addEventListener('click', function () {
-      var cur = html.getAttribute('data-theme');
-      var next = cur === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-      updateThemeIcon(next);
-    });
-  }
-
-  function updateThemeIcon(theme) {
-    if (!themeBtn) return;
-    var i = themeBtn.querySelector('i');
-    if (i) i.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-  }
-
   // ============ 3. Mobile Menu ============
   var menuBtn = document.getElementById('menuToggle');
   var navLinks = document.querySelector('.nav-links');

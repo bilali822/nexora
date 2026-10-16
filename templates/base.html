@@ -101,7 +101,6 @@
     </nav>
 
     <div class="nav-actions">
-      <button id="themeToggle" class="icon-btn" aria-label="Theme"><i class="fas fa-moon"></i></button>
       <form action="{% url 'set_language' %}" method="post" class="lang-form">{% csrf_token %}
         <input name="next" type="hidden" value="{{ request.path }}">
         <select name="language" onchange="this.form.submit()" class="lang-select">
