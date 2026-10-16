@@ -1,16 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
-
-
-class LoginForm(AuthenticationForm):
-    username = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'اسم المستخدم أو البريد', 'autofocus': True})
-    )
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-input', 'placeholder': 'كلمة السر'})
-    )
 
 
 class RegisterForm(UserCreationForm):
@@ -29,9 +20,9 @@ class RegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({'class': 'form-input', 'placeholder': 'اسم المستخدم'})
-        self.fields['password1'].widget.attrs.update({'class': 'form-input', 'placeholder': 'كلمة السر'})
-        self.fields['password2'].widget.attrs.update({'class': 'form-input', 'placeholder': 'تأكيد كلمة السر'})
+        self.fields['username'].widget.attrs.update({'class': 'form-input'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-input'})
+        self.fields['password2'].widget.attrs.update({'class': 'form-input'})
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -59,9 +50,4 @@ class ProfileForm(forms.ModelForm):
             'company': forms.TextInput(attrs={'class': 'form-input'}),
             'bio': forms.Textarea(attrs={'class': 'form-input', 'rows': 4}),
             'avatar': forms.FileInput(attrs={'class': 'form-input'}),
-        }
-        labels = {
-            'company': 'الشركة',
-            'bio': 'نبذة عنك',
-            'avatar': 'الصورة الشخصية',
         }

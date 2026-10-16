@@ -1,4 +1,3 @@
-from simple_history.models import HistoricalRecords
 from django.db import models
 import uuid
 
@@ -46,7 +45,6 @@ class ProjectRequest(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.get_project_type_display()}'
-    history = HistoricalRecords()
 
 
 class ProjectAttachment(models.Model):

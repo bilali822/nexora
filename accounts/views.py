@@ -2,23 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth.views import LoginView
-from .forms import RegisterForm, LoginForm, ProfileForm
+from .forms import RegisterForm, ProfileForm
 from .models import Profile
-
-
-class CustomLoginView(LoginView):
-    template_name = 'accounts/login.html'
-    authentication_form = LoginForm
-    redirect_authenticated_user = True
-
-    def form_valid(self, form):
-        messages.success(self.request, f'أهلاً فيك {form.get_user().first_name or form.get_user().username}!')
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        messages.error(self.request, 'اسم المستخدم أو كلمة السر غلط.')
-        return super().form_invalid(form)
 
 
 def register(request):
@@ -30,13 +15,29 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            messages.success(request, f'تم إنشاء حسابك بنجاح! أهلاً {user.first_name or user.username}')
+            messages.success(request, f'تم إنشاء حسابك! أهلاً {user.first_name or user.username}')
             return redirect('accounts:profile')
         else:
-            messages.error(request, 'في خطأ بالتسجيل، تحقق من البيانات.')
+            messages.error(request, 'في خطأ بالتسجيل.')
     else:
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'form': form})
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('accounts:profile')
+
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            messages.success(request, f'أهلاً {user.first_name or user.username}!')
+            return redirect('accounts:profile')
+        messages.error(request, 'اسم المستخدم أو كلمة السر غلط.')
+    return render(request, 'accounts/login.html')
 
 
 def logout_view(request):
@@ -48,15 +49,6 @@ def logout_view(request):
 @login_required
 def profile(request):
     profile_obj, _ = Profile.objects.get_or_create(user=request.user)
-
-    # تحديث حالة التحقق من الإيميل من allauth
-    try:
-        from allauth.account.models import EmailAddress
-        email_address = EmailAddress.objects.get(user=request.user, email=request.user.email)
-        profile_obj.email_verified = email_address.verified
-        profile_obj.save()
-    except Exception:
-        pass
 
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile_obj)
@@ -77,7 +69,6 @@ def profile(request):
             }
         )
 
-    # طلبات المستخدم
     from requests_app.models import ProjectRequest
     user_requests = ProjectRequest.objects.filter(email=request.user.email).order_by('-created_at')
 

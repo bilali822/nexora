@@ -1,4 +1,3 @@
-from simple_history.models import HistoricalRecords
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
@@ -29,7 +28,6 @@ class Service(models.Model):
 
     def get_absolute_url(self):
         return reverse('core:service_detail', kwargs={'slug': self.slug})
-    history = HistoricalRecords()
 
 
 class WhyUs(models.Model):
@@ -45,7 +43,6 @@ class WhyUs(models.Model):
 
     def __str__(self):
         return self.title
-    history = HistoricalRecords()
 
 
 class ProcessStep(models.Model):
@@ -60,7 +57,6 @@ class ProcessStep(models.Model):
 
     def __str__(self):
         return f'{self.order}. {self.title}'
-    history = HistoricalRecords()
 
 
 class Stat(models.Model):
@@ -76,7 +72,6 @@ class Stat(models.Model):
 
     def __str__(self):
         return f'{self.value} {self.label}'
-    history = HistoricalRecords()
 
 
 class Testimonial(models.Model):
@@ -94,7 +89,6 @@ class Testimonial(models.Model):
 
     def __str__(self):
         return self.name
-    history = HistoricalRecords()
 
 
 class Client(models.Model):
@@ -110,7 +104,6 @@ class Client(models.Model):
 
     def __str__(self):
         return self.name
-    history = HistoricalRecords()
 
 
 class FAQ(models.Model):
@@ -126,7 +119,6 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
-    history = HistoricalRecords()
 
 
 class PricingPlan(models.Model):
@@ -143,7 +135,6 @@ class PricingPlan(models.Model):
 
     def __str__(self):
         return self.name
-    history = HistoricalRecords()
 
 
 class PricingFeature(models.Model):
@@ -185,7 +176,6 @@ class BlogPost(models.Model):
 
     def get_absolute_url(self):
         return reverse('core:blog_detail', kwargs={'slug': self.slug})
-    history = HistoricalRecords()
 
 
 class ContactMessage(models.Model):
@@ -230,4 +220,3 @@ class SiteSettings(models.Model):
     def get(cls):
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
-    history = HistoricalRecords()
