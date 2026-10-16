@@ -35,10 +35,12 @@
   --border-strong: #D8D0C2;
 
   /* Decorative */
-  --blob-1: rgba(234, 88, 12, 0.10);
-  --blob-2: rgba(251, 146, 60, 0.08);
-  --blob-3: rgba(194, 65, 12, 0.06);
-  --grid-color: rgba(26, 22, 20, 0.035);
+  --blob-1: rgba(251, 146, 60, 0.15);
+  --blob-2: rgba(251, 146, 60, 0.16);
+  --blob-3: rgba(194, 65, 12, 0.14);
+  --blob-4: rgba(234, 88, 12, 0.10);
+  --grid-color: rgba(26, 22, 20, 0.04);
+  --shape-color: #EA580C;
 
   /* Layout */
   --radius: 4px;
@@ -63,7 +65,7 @@
   --accent-dark: #F97316;
   --gray-200: #26262B;
   --gray-800: #16161A;
-  --blob-1: rgba(251, 146, 60, 0.06);
+  --blob-1: rgba(251, 146, 60, 0.15);
   --blob-2: rgba(251, 146, 60, 0.04);
   --blob-3: rgba(251, 146, 60, 0.03);
   --grid-color: rgba(245, 243, 238, 0.04);
