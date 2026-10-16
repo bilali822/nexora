@@ -8,7 +8,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile, name='profile'),
-    path('verify-phone/', verification_views.verify_phone, name='verify_phone'),
-    path('verify-phone/code/', verification_views.verify_phone_code, name='verify_phone_code'),
     path('verify-email/', verification_views.verify_email, name='verify_email'),
+    path('confirm/<str:token>/', verification_views.confirm_email, name='confirm_email'),
 ]

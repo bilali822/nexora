@@ -22,14 +22,10 @@ class RegisterForm(UserCreationForm):
         max_length=100, required=False,
         widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'الاسم الأول'})
     )
-    phone = forms.CharField(
-        max_length=30, required=False,
-        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': '+961-XXXXXXXX'})
-    )
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'phone']
+        fields = ['username', 'email', 'first_name']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -43,9 +39,6 @@ class RegisterForm(UserCreationForm):
         user.first_name = self.cleaned_data.get('first_name', '')
         if commit:
             user.save()
-            profile = user.profile
-            profile.phone = self.cleaned_data.get('phone', '')
-            profile.save()
         return user
 
 
@@ -61,15 +54,13 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['phone', 'company', 'bio', 'avatar']
+        fields = ['company', 'bio', 'avatar']
         widgets = {
-            'phone': forms.TextInput(attrs={'class': 'form-input'}),
             'company': forms.TextInput(attrs={'class': 'form-input'}),
             'bio': forms.Textarea(attrs={'class': 'form-input', 'rows': 4}),
             'avatar': forms.FileInput(attrs={'class': 'form-input'}),
         }
         labels = {
-            'phone': 'رقم الهاتف',
             'company': 'الشركة',
             'bio': 'نبذة عنك',
             'avatar': 'الصورة الشخصية',
