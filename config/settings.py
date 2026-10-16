@@ -88,17 +88,8 @@ LOCALE_PATHS = [BASE_DIR / 'locale']
 USE_I18N = True
 USE_L10N = True
 
-# ========== Email ==========
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # للإنتاج استخدم SMTP:
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = config('EMAIL_HOST', default='')
-# EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-DEFAULT_FROM_EMAIL = 'Nexora <noreply@nexora.dev>'
-ADMIN_EMAIL = config('ADMIN_EMAIL', default='admin@nexora.dev')
+# # # # # # ADMIN_EMAIL = config('ADMIN_EMAIL', default='admin@nexora.dev')
 
 # ========== Telegram ==========
 TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN', default='')
@@ -283,9 +274,6 @@ HOTJAR_ID = config('HOTJAR_ID', default='')
 # ========== Site URL (للـ sitemap و og) ==========
 SITE_URL = config('SITE_URL', default='http://127.0.0.1:8000')
 
-# ========== Email Backend (Console للتطوير) ==========
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'Nexora <noreply@nexora.dev>'
 
 # ========== SECURE (للإنتاج) ==========
 # لما تنشر، فعّل هذي:
@@ -359,9 +347,6 @@ LOGIN_REDIRECT_URL = 'accounts:profile'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'core:home'
 ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Nexora] '
 
-# ========== Email (Console للتطوير) ==========
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'Nexora <noreply@nexora.dev>'
 
 # ========== Phone Verify ==========
 PHONE_VERIFICATION = {
@@ -377,3 +362,13 @@ PHONE_VERIFICATION = {
     'APP_NAME': 'Nexora',
     'SECURITY_CODE_EXPIRATION_TIME': 15,
 }
+
+# ========== Email (Gmail SMTP) ==========
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'nexora.1lebanon@gmail.com'
+EMAIL_HOST_PASSWORD = 'qnbh fqfo iepq grsm'
+DEFAULT_FROM_EMAIL = 'Nexora <nexora.1lebanon@gmail.com>'
+SERVER_EMAIL = 'nexora.1lebanon@gmail.com'
