@@ -17,90 +17,74 @@ def scrape_competitor(url):
 def generate_website_code(prompt, color, font, style, competitor_text=""):
     api_key = getattr(settings, 'GEMINI_API_KEY', '') or os.environ.get('GEMINI_API_KEY', '')
     if not api_key:
-        return None, 'مفتاح Gemini API غير مضبوط'
+        return None, 'مفتاح Gemini API غير مضبوط في .env'
 
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        # المكتبة الجديدة
+        from google import genai
+        
+        client = genai.Client(api_key=api_key)
 
-        sys_prompt = f"""You are an expert web developer. Generate a 3-page website.
-Theme: Color {color}, Font {font}, Style {style}.
-Use AI images by formatting as: <img src="https://image.pollinations.ai/prompt/[ENGLISH_PROMPT]?width=800&height=600">
-{"Inspiration from competitor: " + competitor_text if competitor_text else ""}
+        sys_prompt = f"""You are an elite web developer. Your task is to generate a 3-page website (index.html, about.html, contact.html).
+You MUST strictly follow the user's request. Do NOT use generic SaaS landing page layouts.
+If the user asks for a restaurant, build a restaurant. If they ask for a clinic, build a clinic.
+
+Theme Rules:
+- Primary Color: {color}
+- Font: {font}
+- Style: {style}
+- Use this for images: <img src="https://image.pollinations.ai/prompt/ENGLISH_PROMPT_HERE?width=800&height=600">
+- Include internal links between the 3 pages in the navigation.
+
+{f"Inspiration from competitor: {competitor_text}" if competitor_text else ""}
 
 User Request: {prompt}
 
-Return ONLY a valid JSON object without markdown blocks, mapping filenames to HTML strings.
-Example:
+Return ONLY a valid JSON object without markdown blocks.
+Example format:
 {{
   "index.html": "<!DOCTYPE html><html>...</html>",
   "about.html": "<!DOCTYPE html><html>...</html>",
   "contact.html": "<!DOCTYPE html><html>...</html>"
 }}"""
 
-        response = model.generate_content(sys_prompt)
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=sys_prompt,
+        )
+        
         text = response.text.strip()
         
-        # Clean markdown
+        # Clean markdown if AI includes it
         text = re.sub(r'^```json\s*', '', text)
         text = re.sub(r'^```\s*', '', text)
         text = re.sub(r'```$', '', text)
         
+        # Validate JSON
+        json.loads(text)
+        
         return text, None
     except Exception as e:
-        return None, str(e)
-
+        return None, f'Gemini Error: {str(e)}'
 
 def inject_seo_tags(html_content, site_title, site_desc):
-    """حقن الـ SEO Tags في الـ HTML المولد تلقائياً"""
-    import re
-    from datetime import datetime
-    
     seo_block = f"""
     <!-- SEO Auto-Generated -->
     <meta name="description" content="{site_desc[:160]}">
-    <meta name="keywords" content="web design, development, Nexora, {site_title}">
-    <meta name="author" content="Nexora">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
     <meta property="og:title" content="{site_title}">
     <meta property="og:description" content="{site_desc[:160]}">
-    <meta property="og:site_name" content="{site_title}">
-    <meta property="og:locale" content="ar_LB">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{site_title}">
-    <meta name="twitter:description" content="{site_desc[:160]}">
-    
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {{
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "{site_title}",
-      "description": "{site_desc[:160]}",
-      "publisher": {{"@type": "Organization", "name": "Nexora"}}
-    }}
-    </script>
     <!-- End SEO -->
     """
-
-    # حقن قبل </head>
     if '</head>' in html_content:
         html_content = html_content.replace('</head>', seo_block + '</head>')
     return html_content
 
 def apply_seo_to_pages(json_code, site_title="Nexora Website", site_desc="موقع احترافي مبني بواسطة Nexora"):
-    import json
     try:
         pages = json.loads(json_code)
         for filename, html in pages.items():
             if filename.endswith('.html'):
                 pages[filename] = inject_seo_tags(html, site_title, site_desc)
-        return json.dumps(pages)
+        return json.dumps(pages, ensure_ascii=False)
     except:
         return json_code

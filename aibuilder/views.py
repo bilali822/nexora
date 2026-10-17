@@ -12,7 +12,6 @@ from .models import GeneratedWebsite
 from .forms import WebsitePromptForm, EditWithAIForm, GitHubDeployForm
 from .ai_service import generate_website_code, scrape_competitor, apply_seo_to_pages
 from .models import GeneratedWebsite, SiteVersion
-from .fallback_designs import saas_design
 
 @login_required
 def generate_site_view(request):
@@ -30,11 +29,11 @@ def generate_site_view(request):
             )
 
             if error or not code:
-                # Fallback
-                fallback = saas_design(site.prompt)
-                site.generated_code = json.dumps({"index.html": fallback})
-                site.status = 'completed'
-                site.error_message = f"Fallback used: {error}"
+                messages.error(request, f'❌ فشل التوليد: {error}')
+                site.status = 'failed'
+                site.error_message = str(error)
+                site.save()
+                return redirect('aibuilder:generate')
             else:
                 code = apply_seo_to_pages(code, site.prompt[:50])
                 site.generated_code = code
