@@ -4,9 +4,9 @@
   <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
     <div>
       <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">لوحة تحكم الموقع المولد</h1>
-      {% if site.github_repo_url %}
+      {% if site.published_url %}
       <p style="color: #10B981; font-weight: bold; margin: 0;">
-        🚀 منشور على: <a href="{{ site.github_repo_url }}" target="_blank">{{ site.github_repo_url }}</a>
+        🚀 منشور على: <a href="{{ site.published_url }}" target="_blank">{{ site.published_url }}</a>
       </p>
       {% endif %}
     </div>
@@ -20,36 +20,63 @@
 <section class="section" style="padding-top: 1rem;">
   <div class="container">
     
+    <!-- أزرار التحكم (شبكة من عمودين) -->
     <div class="grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 2rem;">
+      
+      <!-- تعديل AI -->
       <div class="card">
         <h3>💬 تعديل بالذكاء الاصطناعي</h3>
-        
+        <form method="post" action="{% url 'aibuilder:edit_with_ai' site.id %}">
+          {% csrf_token %}
+          <textarea name="instruction" class="form-input" rows="2" placeholder="مثال: خلي الألوان أغمق..." required style="margin-bottom: 0.5rem;"></textarea>
+          <button type="submit" class="btn-primary btn-sm" style="width: 100%;">تطبيق التعديل</button>
+        </form>
+      </div>
+
+      <!-- النشر على here.now -->
+      <div class="card">
+        <h3>🌐 نشر على الإنترنت (here.now)</h3>
+        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">احصل على رابط مباشر للموقع خلال ثوانٍ.</p>
+        <form method="post" action="{% url 'aibuilder:publish_here_now' site.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn-primary btn-sm" style="width: 100%;">
+            {% if site.is_published %}تحديث المنشور{% else %}نشر الموقع الآن{% endif %}
+          </button>
+        </form>
+        {% if site.published_url %}
+        <p style="margin-top: 0.75rem; color: #10B981; font-size: 0.8125rem; word-break: break-all;">
+          ✅ الرابط: <a href="{{ site.published_url }}" target="_blank" style="color: #10B981; text-decoration: underline;">{{ site.published_url }}</a>
+        </p>
+        {% endif %}
       </div>
     </div>
 
+    <!-- المعاينة وسجل النسخ -->
     <div style="display: grid; grid-template-columns: 1fr 300px; gap: 1.5rem;">
-      <div style="border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff;">
-        <!-- معاينة مصغرة -->
-        <iframe srcdoc="{{ index_html|escape }}" style="width: 100%; height: 600px; border: none;"></iframe>
+      
+      <!-- إطار المعاينة -->
+      <div style="border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff; height: 600px;">
+        <iframe srcdoc="{{ index_html|escape }}" style="width: 100%; height: 100%; border: none;"></iframe>
       </div>
       
-      <div class="card" style="align-self: start;">
+      <!-- سجل النسخ -->
+      <div class="card" style="align-self: start; max-height: 600px; overflow-y: auto;">
         <h3>⏱️ سجل النسخ</h3>
         {% if versions %}
-        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
           {% for v in versions %}
           <div style="padding: 0.75rem; background: var(--bg-muted); border-radius: var(--radius);">
             <p style="font-size: 0.75rem; color: var(--text-subtle); margin-bottom: 0.25rem;">{{ v.created_at|date:"Y-m-d H:i" }}</p>
-            <p style="font-size: 0.8125rem; margin-bottom: 0.5rem;">{{ v.instruction_applied|truncatechars:40 }}</p>
+            <p style="font-size: 0.8125rem; margin-bottom: 0.5rem; color: var(--text);">{{ v.instruction_applied|truncatechars:40 }}</p>
             <form method="post" action="{% url 'aibuilder:rollback_version' site.id v.id %}">
               {% csrf_token %}
-              <button type="submit" class="btn-ghost btn-sm" style="width: 100%;">↺ تراجع</button>
+              <button type="submit" class="btn-ghost btn-sm" style="width: 100%;">↺ تراجع لهذه النسخة</button>
             </form>
           </div>
           {% endfor %}
         </div>
         {% else %}
-        <p style="font-size: 0.875rem; color: var(--text-muted);">لا توجد نسخ سابقة. جرّب تعديل الموقع.</p>
+        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 1rem;">لا توجد نسخ سابقة. جرّب تعديل الموقع بالذكاء الاصطناعي.</p>
         {% endif %}
       </div>
     </div>
