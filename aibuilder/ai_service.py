@@ -15,7 +15,8 @@ def scrape_competitor(url):
         return ""
 
 def generate_website_code(prompt, color, font, style, competitor_text=""):
-    api_key = getattr(settings, 'GEMINI_API_KEY', '') or os.environ.get('GEMINI_API_KEY', '')
+    from decouple import config
+    api_key = getattr(settings, 'GEMINI_API_KEY', '') or os.environ.get('GEMINI_API_KEY', '') or config('GEMINI_API_KEY', default='')
     if not api_key:
         return None, 'مفتاح Gemini API غير مضبوط في .env'
 

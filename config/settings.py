@@ -248,3 +248,7 @@ PASSWORD_HASHERS = [
 
 # Proxy
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+# ========== Gemini AI ==========
+GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
