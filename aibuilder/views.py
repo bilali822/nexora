@@ -85,7 +85,7 @@ def edit_with_ai(request, site_id):
         try:
             import google.generativeai as genai
             genai.configure(api_key=getattr(settings, 'GEMINI_API_KEY', ''))
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            model = genai.GenerativeModel('gemini-2.5-flash')
             
             # حفظ نسخة احتياطية قبل التعديل
             SiteVersion.objects.create(
