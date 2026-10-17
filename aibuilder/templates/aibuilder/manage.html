@@ -23,21 +23,7 @@
     <div class="grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 2rem;">
       <div class="card">
         <h3>💬 تعديل بالذكاء الاصطناعي</h3>
-        <form method="post" action="{% url 'aibuilder:edit_with_ai' site.id %}">
-          {% csrf_token %}
-          <textarea name="instruction" class="form-input" rows="2" placeholder="مثال: خلي الألوان أغمق..." required style="margin-bottom: 0.5rem;"></textarea>
-          <button type="submit" class="btn-primary btn-sm">تطبيق التعديل</button>
-        </form>
-      </div>
-
-      <div class="card">
-        <h3>🚀 نشر على GitHub Pages</h3>
-        <form method="post" action="{% url 'aibuilder:deploy_github' site.id %}">
-          {% csrf_token %}
-          <input type="text" name="repo_name" class="form-input" placeholder="repo-name" required style="margin-bottom: 0.5rem;">
-          <input type="password" name="github_token" class="form-input" placeholder="GitHub Token (repo scope)" required style="margin-bottom: 0.5rem;">
-          <button type="submit" class="btn-primary btn-sm">نشر</button>
-        </form>
+        
       </div>
     </div>
 

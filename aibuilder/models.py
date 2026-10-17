@@ -23,6 +23,7 @@ class GeneratedWebsite(models.Model):
     
     # Deployment
     github_repo_url = models.URLField(blank=True, null=True)
+    published_url = models.URLField(blank=True, null=True)
     is_published = models.BooleanField(default=False)
     
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
