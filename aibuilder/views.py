@@ -6,50 +6,44 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from .models import GeneratedWebsite
-from .forms import WebsitePromptForm, EditWithAIForm, GitHubDeployForm
+from .forms import WebsitePromptForm, EditWithAIForm
 from .ai_service import generate_website_code, scrape_competitor, apply_seo_to_pages
 
 # ================================================================
-# PUBLISH TO HERE.NOW
+# PUBLISH TO HERE.NOW (FIXED)
 # ================================================================
 def publish_to_here_now(html_content):
-    """ينشر الكود المولد على here.now ويعيد الرابط"""
-    # 1. إنشاء عملية نشر
-    create_payload = {
-        "files": [{
-            "path": "index.html",
-            "size": len(html_content.encode('utf-8')),
-            "contentType": "text/html"
-        }]
-    }
-    create_res = requests.post(
-        'https://here.now/api/v1/publish',
-        headers={'content-type': 'application/json'},
-        json=create_payload,
-        timeout=10
-    )
-    create_data = create_res.json()
-    
-    upload_url = create_data['upload']['uploads'][0]['url']
-    slug = create_data['slug']
-    
-    # 2. رفع الملف
-    requests.put(
-        upload_url,
-        headers={'content-type': 'text/html'},
-        data=html_content.encode('utf-8'),
-        timeout=10
-    )
-    
-    # 3. إنهاء النشر
-    requests.post(
-        f'https://here.now/api/v1/publish/{slug}/finalize',
-        headers={'content-type': 'application/json'},
-        json={'versionId': create_data['versionId']},
-        timeout=10
-    )
-    
-    return create_data.get('siteUrl')
+    try:
+        # 1. إنشاء عملية نشر
+        create_payload = {
+            "files": [{"path": "index.html", "size": len(html_content.encode('utf-8')), "contentType": "text/html"}]
+        }
+        create_res = requests.post('https://here.now/api/v1/publish', json=create_payload, timeout=10)
+        create_data = create_res.json()
+        
+        if 'upload' not in create_data:
+            raise Exception(f"API Error: {create_data}")
+
+        upload_url = create_data['upload']['uploads'][0]['url']
+        slug = create_data.get('slug')
+        version_id = create_data['upload'].get('versionId')
+
+        # 2. رفع الملف
+        put_res = requests.put(upload_url, data=html_content.encode('utf-8'), headers={'Content-Type': 'text/html'}, timeout=10)
+        if put_res.status_code not in [200, 201]:
+            raise Exception(f"Upload failed: {put_res.status_code}")
+
+        # 3. إنهاء النشر
+        finalize_url = create_data['upload'].get('finalizeUrl') or f'https://here.now/api/v1/publish/{slug}/finalize'
+        finalize_payload = {'versionId': version_id} if version_id else {}
+        fin_res = requests.post(finalize_url, json=finalize_payload, timeout=10)
+        
+        if fin_res.status_code != 200:
+            raise Exception(f"Finalize failed: {fin_res.text}")
+
+        return create_data.get('siteUrl')
+    except Exception as e:
+        raise Exception(str(e))
 
 # ================================================================
 # VIEWS
@@ -64,9 +58,7 @@ def generate_site_view(request):
             site.status = 'pending'
             
             competitor_text = scrape_competitor(site.competitor_url)
-            code, error = generate_website_code(
-                site.prompt, site.theme_color, site.theme_font, site.theme_style, competitor_text
-            )
+            code, error = generate_website_code(site.prompt, site.theme_color, site.theme_font, site.theme_style, competitor_text)
 
             if error or not code:
                 messages.error(request, f'❌ فشل التوليد: {error}')
@@ -74,12 +66,12 @@ def generate_site_view(request):
                 site.error_message = str(error)
                 site.save()
                 return redirect('aibuilder:generate')
-            else:
-                code = apply_seo_to_pages(code, site.prompt[:50])
-                site.generated_code = code
-                site.status = 'completed'
-                site.save()
-                return redirect('aibuilder:preview_site', site_id=site.id)
+            
+            code = apply_seo_to_pages(code, site.prompt[:50])
+            site.generated_code = code
+            site.status = 'completed'
+            site.save()
+            return redirect('aibuilder:preview_site', site_id=site.id)
     else:
         form = WebsitePromptForm()
     return render(request, 'aibuilder/generate_form.html', {'form': form})
@@ -124,7 +116,7 @@ def publish_here_now(request, site_id):
         site.is_published = True
         site.status = 'published'
         site.save()
-        messages.success(request, f'✅ تم النشر! الرابط: {url}')
+        messages.success(request, f'✅ تم النشر بنجاح! الرابط: {url}')
     except Exception as e:
         messages.error(request, f'❌ فشل النشر: {e}')
 
@@ -158,7 +150,7 @@ def edit_with_ai(request, site_id):
             import os
             from django.conf import settings as st
             client = OpenAI(api_key=os.environ.get('GROQ_API_KEY','') or getattr(st,'GROQ_API_KEY',''), base_url="https://api.groq.com/openai/v1")
-            prompt = f"Here is the current JSON of website pages:\\n{site.generated_code}\\n\\nApply this modification: {instruction}\\nReturn ONLY updated valid JSON."
+            prompt = f"Here is the current JSON of website pages:\n{site.generated_code}\n\nApply this modification: {instruction}\nReturn ONLY updated valid JSON."
             res = client.chat.completions.create(model="openai/gpt-oss-120b", messages=[{"role":"user","content":prompt}], response_format={"type":"json_object"}, max_tokens=8000)
             text = res.choices[0].message.content.strip()
             site.generated_code = text
