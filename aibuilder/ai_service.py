@@ -4,6 +4,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from django.conf import settings
+from openai import OpenAI
 
 def scrape_competitor(url):
     if not url: return ""
@@ -15,16 +16,18 @@ def scrape_competitor(url):
         return ""
 
 def generate_website_code(prompt, color, font, style, competitor_text=""):
-    from decouple import config
-    api_key = getattr(settings, 'GEMINI_API_KEY', '') or os.environ.get('GEMINI_API_KEY', '') or config('GEMINI_API_KEY', default='')
+    # استخدام مفتاح DeepSeek
+    api_key = os.environ.get('GROQ_API_KEY', '') or getattr(settings, 'GROQ_API_KEY', '')
+    
     if not api_key:
-        return None, 'مفتاح Gemini API غير مضبوط في .env'
+        return None, 'مفتاح Groq API غير مضبوط. أضفه في settings.py'
 
     try:
-        # المكتبة الجديدة
-        from google import genai
-        
-        client = genai.Client(api_key=api_key)
+        # DeepSeek متوافق مع OpenAI API
+        client = OpenAI(
+            api_key=api_key,
+            base_url="https://api.groq.com/openai/v1"
+        )
 
         sys_prompt = f"""You are an elite web developer. Your task is to generate a 3-page website (index.html, about.html, contact.html).
 You MUST strictly follow the user's request. Do NOT use generic SaaS landing page layouts.
@@ -34,8 +37,9 @@ Theme Rules:
 - Primary Color: {color}
 - Font: {font}
 - Style: {style}
-- Use this for images: <img src="https://image.pollinations.ai/prompt/ENGLISH_PROMPT_HERE?width=800&height=600">
+- Use this for images: <img src="https://picsum.photos/800/600?random=1">
 - Include internal links between the 3 pages in the navigation.
+- Use Tailwind CSS via CDN.
 
 {f"Inspiration from competitor: {competitor_text}" if competitor_text else ""}
 
@@ -49,24 +53,23 @@ Example format:
   "contact.html": "<!DOCTYPE html><html>...</html>"
 }}"""
 
-        response = client.models.generate_content(
-            model='gemini-3.8-flash',
-            contents=sys_prompt,
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": sys_prompt},
+                {"role": "user", "content": f"Please generate the website for: {prompt}"}
+            ],
+            response_format={"type": "json_object"}
         )
         
-        text = response.text.strip()
-        
-        # Clean markdown if AI includes it
+        text = response.choices[0].message.content.strip()
         text = re.sub(r'^```json\s*', '', text)
         text = re.sub(r'^```\s*', '', text)
         text = re.sub(r'```$', '', text)
-        
-        # Validate JSON
         json.loads(text)
-        
         return text, None
     except Exception as e:
-        return None, f'Gemini Error: {str(e)}'
+        return None, f'DeepSeek Error: {str(e)}'
 
 def inject_seo_tags(html_content, site_title, site_desc):
     seo_block = f"""

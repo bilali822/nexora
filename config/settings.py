@@ -147,7 +147,7 @@ SITE_URL = config('SITE_URL', default='http://127.0.0.1:8000')
 
 # ========== SECURE (للإنتاج) ==========
 # لما تنشر، فعّل هذي:
-# SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = False
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
 # SECURE_HSTS_SECONDS = 31536000
@@ -221,7 +221,7 @@ if _env_host:
     CSRF_TRUSTED_ORIGINS = [f'https://{_env_host}']
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['nexorastudiomakerwebandapps.pythonanywhere.com', 'localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://nexorastudiomakerwebandapps.pythonanywhere.com']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -252,3 +252,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # ========== Gemini AI ==========
 GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
+
+# ========== DeepSeek API ==========
+DEEPSEEK_API_KEY = config('DEEPSEEK_API_KEY', default='')
+
+# ========== Groq API ==========
+GROQ_API_KEY = config('GROQ_API_KEY', default='')

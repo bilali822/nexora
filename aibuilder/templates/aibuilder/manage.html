@@ -3,7 +3,7 @@
 <section class="page-head" style="padding: 2rem 0;">
   <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
     <div>
-      <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">✅ الموقع المولد</h1>
+      <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">لوحة تحكم الموقع المولد</h1>
       {% if site.github_repo_url %}
       <p style="color: #10B981; font-weight: bold; margin: 0;">
         🚀 منشور على: <a href="{{ site.github_repo_url }}" target="_blank">{{ site.github_repo_url }}</a>
@@ -11,6 +11,7 @@
       {% endif %}
     </div>
     <div style="display: flex; gap: 0.5rem;">
+      <a href="{% url 'aibuilder:preview_site' site.id %}" class="btn-primary btn-sm" target="_blank">👁️ معاينة الشاشة الكاملة</a>
       <a href="{% url 'aibuilder:export_zip' site.id %}" class="btn-ghost btn-sm">⬇️ تحميل ZIP</a>
     </div>
   </div>
@@ -19,10 +20,7 @@
 <section class="section" style="padding-top: 1rem;">
   <div class="container">
     
-    <!-- أدوات التحكم -->
     <div class="grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 2rem;">
-      
-      <!-- تعديل AI -->
       <div class="card">
         <h3>💬 تعديل بالذكاء الاصطناعي</h3>
         <form method="post" action="{% url 'aibuilder:edit_with_ai' site.id %}">
@@ -32,7 +30,6 @@
         </form>
       </div>
 
-      <!-- نشر GitHub -->
       <div class="card">
         <h3>🚀 نشر على GitHub Pages</h3>
         <form method="post" action="{% url 'aibuilder:deploy_github' site.id %}">
@@ -44,14 +41,12 @@
       </div>
     </div>
 
-    <!-- المعاينة والنسخ -->
     <div style="display: grid; grid-template-columns: 1fr 300px; gap: 1.5rem;">
-      
       <div style="border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff;">
+        <!-- معاينة مصغرة -->
         <iframe srcdoc="{{ index_html|escape }}" style="width: 100%; height: 600px; border: none;"></iframe>
       </div>
       
-      <!-- Version History -->
       <div class="card" style="align-self: start;">
         <h3>⏱️ سجل النسخ</h3>
         {% if versions %}
@@ -68,7 +63,7 @@
           {% endfor %}
         </div>
         {% else %}
-        <p style="font-size: 0.875rem; color: var(--text-muted);">لا توجد نسخ سابقة. جرّب تعديل الموقع بالذكاء الاصطناعي.</p>
+        <p style="font-size: 0.875rem; color: var(--text-muted);">لا توجد نسخ سابقة. جرّب تعديل الموقع.</p>
         {% endif %}
       </div>
     </div>

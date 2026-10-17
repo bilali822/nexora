@@ -45,17 +45,28 @@ def generate_site_view(request):
         form = WebsitePromptForm()
     return render(request, 'aibuilder/generate_form.html', {'form': form})
 
+
 @login_required
-def preview_site_view(request, site_id):
+def fullscreen_preview(request, site_id):
     site = get_object_or_404(GeneratedWebsite, id=site_id, user=request.user)
     try:
         pages = json.loads(site.generated_code)
         index_html = pages.get('index.html', '')
     except:
         index_html = site.generated_code or ''
-        
-    return render(request, 'aibuilder/preview.html', {'site': site, 'index_html': index_html, 'versions': site.versions.all()[:10]})
+    return render(request, 'aibuilder/fullscreen_preview.html', {'site': site, 'index_html': index_html})
 
+@login_required
+def manage_site(request, site_id):
+    site = get_object_or_404(GeneratedWebsite, id=site_id, user=request.user)
+    try:
+        pages = json.loads(site.generated_code)
+        index_html = pages.get('index.html', '')
+    except:
+        index_html = site.generated_code or ''
+    return render(request, 'aibuilder/manage.html', {'site': site, 'index_html': index_html, 'versions': site.versions.all()[:10]})
+
+# ============= الدوال القديمة المعدلة =============
 @login_required
 def export_zip(request, site_id):
     site = get_object_or_404(GeneratedWebsite, id=site_id, user=request.user)
