@@ -173,6 +173,13 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+    
+    @property
+    def reading_time(self):
+        import math
+        words = len(self.content.split())
+        minutes = max(1, math.ceil(words / 200))
+        return minutes
 
     def get_absolute_url(self):
         return reverse('core:blog_detail', kwargs={'slug': self.slug})

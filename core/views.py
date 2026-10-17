@@ -82,3 +82,48 @@ def contact(request):
 
 def handler404(request, exception):
     return render(request, '404.html', status=404)
+
+
+# ================================================================
+# SEARCH
+# ================================================================
+def search(request):
+    from django.db.models import Q
+    from projects.models import Project
+    from .models import Service, BlogPost, FAQ
+
+    query = request.GET.get('q', '').strip()
+    results = {
+        'services': [],
+        'projects': [],
+        'articles': [],
+        'faqs': [],
+    }
+
+    if query:
+        results['services'] = Service.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )[:10]
+
+        results['projects'] = Project.objects.filter(
+            Q(title__icontains=query) | Q(short_description__icontains=query) |
+            Q(tech_stack__icontains=query)
+        )[:10]
+
+        results['articles'] = BlogPost.objects.filter(
+            Q(title__icontains=query) | Q(excerpt__icontains=query) |
+            Q(content__icontains=query), is_published=True
+        )[:10]
+
+        results['faqs'] = FAQ.objects.filter(
+            Q(question__icontains=query) | Q(answer__icontains=query),
+            is_active=True
+        )[:10]
+
+    total = sum(len(v) for v in results.values())
+
+    return render(request, 'core/search.html', {
+        'query': query,
+        'results': results,
+        'total': total,
+    })

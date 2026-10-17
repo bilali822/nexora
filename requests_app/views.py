@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from core.rate_limit import ratelimit
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
@@ -22,6 +23,7 @@ def _telegram_notify(text):
         pass
 
 
+@ratelimit(key='ip', rate='5/h', block=True)
 def request_form(request):
     if request.method == 'POST':
         form = ProjectRequestForm(request.POST, request.FILES)

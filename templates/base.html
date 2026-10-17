@@ -101,6 +101,10 @@
     </nav>
 
     <div class="nav-actions">
+      <a href="{% url 'core:search' %}" class="nav-search-btn" title="بحث">
+        <i class="fas fa-search"></i>
+      </a>
+      
       {% if user.is_authenticated %}
 <div class="user-menu">
   <button class="user-menu-btn" id="userMenuBtn">

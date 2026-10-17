@@ -1,28 +1,48 @@
 {% extends 'base.html' %}
-{% block title %}معاينة الموقع — Nexora{% endblock %}
 {% block content %}
-<section class="page-head"><div class="container">
-  <h1>✅ تم توليد موقعك</h1>
-  <p>{{ site.prompt|truncatechars:100 }}</p>
-</div></section>
-
-<section class="section"><div class="container">
-  <div style="background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--border);">
-    <iframe srcdoc="{{ site.generated_code|escape }}" style="width:100%;height:700px;border:none;display:block;" sandbox="allow-scripts"></iframe>
+<section class="page-head" style="padding: 2rem 0;">
+  <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">✅ الموقع المولد</h1>
+      {% if site.github_repo_url %}
+      <p style="color: #10B981; font-weight: bold;">🚀 منشور على: <a href="{{ site.github_repo_url }}" target="_blank">{{ site.github_repo_url }}</a></p>
+      {% endif %}
+    </div>
+    <div style="display: flex; gap: 0.5rem;">
+      <a href="{% url 'aibuilder:export_zip' site.id %}" class="btn-ghost btn-sm">⬇️ تحميل ZIP</a>
+    </div>
   </div>
+</section>
 
-  <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-    <a href="{% url 'aibuilder:generate' %}" class="btn-primary">
-      <i class="fas fa-plus"></i> ولّد موقعاً آخر
-    </a>
-    <a href="{% url 'aibuilder:my_sites' %}" class="btn-ghost">مواقعي</a>
+<section class="section" style="padding-top: 1rem;">
+  <div class="container">
+    
+    <!-- أدوات التعديل والنشر -->
+    <div class="grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 2rem;">
+      <div class="card">
+        <h3>💬 تعديل بالذكاء الاصطناعي</h3>
+        <form method="post" action="{% url 'aibuilder:edit_with_ai' site.id %}">
+          {% csrf_token %}
+          <textarea name="instruction" class="form-input" rows="2" placeholder="مثال: خلي الألوان أغمق..." required style="margin-bottom: 0.5rem;"></textarea>
+          <button type="submit" class="btn-primary btn-sm">تطبيق</button>
+        </form>
+      </div>
+      
+      <div class="card">
+        <h3>🚀 نشر على GitHub Pages</h3>
+        <form method="post" action="{% url 'aibuilder:deploy_github' site.id %}">
+          {% csrf_token %}
+          <input type="text" name="repo_name" class="form-input" placeholder="repo-name" required style="margin-bottom: 0.5rem;">
+          <input type="password" name="github_token" class="form-input" placeholder="GitHub Token (repo scope)" required style="margin-bottom: 0.5rem;">
+          <button type="submit" class="btn-primary btn-sm">نشر</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- المعاينة -->
+    <div style="border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff;">
+      <iframe srcdoc="{{ index_html|escape }}" style="width: 100%; height: 600px; border: none;"></iframe>
+    </div>
   </div>
-
-  <details style="margin-top:24px;">
-    <summary style="cursor:pointer;padding:16px;background:var(--bg-2);border-radius:12px;font-weight:600;">
-      📝 عرض الكود المولّد
-    </summary>
-    <pre style="background:var(--bg-3);padding:20px;border-radius:12px;overflow-x:auto;margin-top:12px;font-size:12px;direction:ltr;text-align:left;">{{ site.generated_code }}</pre>
-  </details>
-</div></section>
+</section>
 {% endblock %}

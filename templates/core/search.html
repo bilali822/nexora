@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if query %}نتائج البحث عن "{{ query }}"{% else %}البحث{% endif %} — Nexora
+{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <h1>
+      {% if query %}
+        نتائج البحث
+      {% else %}
+        ابحث في الموقع
+      {% endif %}
+    </h1>
+    
+    <form method="get" class="search-form" style="margin-top: 1.5rem; max-width: 640px;">
+      <input type="text" name="q" value="{{ query }}" placeholder="ابحث عن خدمات، مشاريع، مقالات..." class="form-input" autofocus>
+      <button type="submit" class="btn-primary">
+        <i class="fas fa-search"></i> بحث
+      </button>
+    </form>
+    
+    {% if query %}
+    <p style="margin-top: 1rem; color: var(--text-muted);">
+      تم العثور على <strong style="color: var(--text);">{{ total }}</strong> نتيجة
+    </p>
+    {% endif %}
+  </div>
+</section>
+
+{% if query %}
+<section class="section">
+  <div class="container">
+
+    {% if results.services %}
+    <div class="search-section">
+      <h2>الخدمات <span class="count">{{ results.services|length }}</span></h2>
+      <div class="search-results">
+        {% for s in results.services %}
+        <a href="{{ s.get_absolute_url }}" class="search-result">
+          <h3>{{ s.title }}</h3>
+          <p>{{ s.description|truncatechars:150 }}</p>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if results.projects %}
+    <div class="search-section">
+      <h2>المشاريع <span class="count">{{ results.projects|length }}</span></h2>
+      <div class="search-results">
+        {% for p in results.projects %}
+        <a href="{{ p.get_absolute_url }}" class="search-result">
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.short_description }}</p>
+          <span class="tag">{{ p.get_category_display }}</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if results.articles %}
+    <div class="search-section">
+      <h2>المقالات <span class="count">{{ results.articles|length }}</span></h2>
+      <div class="search-results">
+        {% for a in results.articles %}
+        <a href="{{ a.get_absolute_url }}" class="search-result">
+          <h3>{{ a.title }}</h3>
+          <p>{{ a.excerpt }}</p>
+          <span class="meta">{{ a.created_at|date:"Y-m-d" }} · {{ a.reading_time }} دقيقة قراءة</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if results.faqs %}
+    <div class="search-section">
+      <h2>الأسئلة الشائعة <span class="count">{{ results.faqs|length }}</span></h2>
+      <div class="faq-list">
+        {% for f in results.faqs %}
+        <details class="faq-item">
+          <summary>{{ f.question }}<i class="fas fa-plus"></i></summary>
+          <p>{{ f.answer }}</p>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if total == 0 %}
+    <div class="empty-state">
+      <h3>لا توجد نتائج لـ "{{ query }}"</h3>
+      <p>جرّب كلمات مختلفة، أو تصفح الأقسام.</p>
+      <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+        <a href="{% url 'core:services' %}" class="btn-ghost">الخدمات</a>
+        <a href="{% url 'projects:list' %}" class="btn-ghost">المشاريع</a>
+        <a href="{% url 'core:blog_list' %}" class="btn-ghost">المدونة</a>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endif %}
+{% endblock %}

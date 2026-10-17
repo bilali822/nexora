@@ -7,15 +7,29 @@ class GeneratedWebsite(models.Model):
         ('pending', 'قيد التوليد'),
         ('completed', 'مكتمل'),
         ('failed', 'فشل'),
+        ('published', 'منشور'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='generated_sites', null=True, blank=True)
     prompt = models.TextField(verbose_name='وصف الموقع')
-    generated_code = models.TextField(blank=True, null=True, verbose_name='الكود المولّد')
-    preview_url = models.URLField(blank=True, null=True, verbose_name='رابط المعاينة')
+    
+    # Theme
+    theme_color = models.CharField(max_length=20, default='#EA580C')
+    theme_font = models.CharField(max_length=50, default='Tajawal')
+    theme_style = models.CharField(max_length=50, default='modern')
+    
+    # Content
+    generated_code = models.TextField(blank=True, null=True, verbose_name='الكود المولّد (JSON للصفحات)')
+    
+    # Deployment
+    github_repo_url = models.URLField(blank=True, null=True)
+    is_published = models.BooleanField(default=False)
+    
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     error_message = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    competitor_url = models.URLField(blank=True, null=True)
 
     class Meta:
         ordering = ['-created_at']
