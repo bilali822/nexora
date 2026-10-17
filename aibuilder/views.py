@@ -10,7 +10,8 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from .models import GeneratedWebsite
 from .forms import WebsitePromptForm, EditWithAIForm, GitHubDeployForm
-from .ai_service import generate_website_code, scrape_competitor
+from .ai_service import generate_website_code, scrape_competitor, apply_seo_to_pages
+from .models import GeneratedWebsite, SiteVersion
 from .fallback_designs import saas_design
 
 @login_required
@@ -35,6 +36,7 @@ def generate_site_view(request):
                 site.status = 'completed'
                 site.error_message = f"Fallback used: {error}"
             else:
+                code = apply_seo_to_pages(code, site.prompt[:50])
                 site.generated_code = code
                 site.status = 'completed'
             
@@ -53,7 +55,7 @@ def preview_site_view(request, site_id):
     except:
         index_html = site.generated_code or ''
         
-    return render(request, 'aibuilder/preview.html', {'site': site, 'index_html': index_html})
+    return render(request, 'aibuilder/preview.html', {'site': site, 'index_html': index_html, 'versions': site.versions.all()[:10]})
 
 @login_required
 def export_zip(request, site_id):
@@ -85,13 +87,20 @@ def edit_with_ai(request, site_id):
             genai.configure(api_key=getattr(settings, 'GEMINI_API_KEY', ''))
             model = genai.GenerativeModel('gemini-1.5-flash')
             
+            # حفظ نسخة احتياطية قبل التعديل
+            SiteVersion.objects.create(
+                site=site,
+                code_snapshot=site.generated_code,
+                instruction_applied=instruction[:250]
+            )
+
             prompt = f"Here is the current JSON of website pages:\n{site.generated_code}\n\nApply this modification to the code: {instruction}\nReturn ONLY updated valid JSON."
             res = model.generate_content(prompt)
             text = res.text.strip().replace('```json', '').replace('```', '')
             
             site.generated_code = text
             site.save()
-            messages.success(request, '✅ تم التعديل بنجاح')
+            messages.success(request, '✅ تم التعديل بنجاح (تم حفظ نسخة سابقة)')
         except Exception as e:
             messages.error(request, f'❌ فشل التعديل: {e}')
             
@@ -131,4 +140,23 @@ def deploy_github(request, site_id):
         except Exception as e:
             messages.error(request, f'❌ فشل الرفع: {e}')
             
+    return redirect('aibuilder:preview_site', site_id=site.id)
+
+
+@login_required
+@require_POST
+def rollback_version(request, site_id, version_id):
+    site = get_object_or_404(GeneratedWebsite, id=site_id, user=request.user)
+    version = get_object_or_404(SiteVersion, id=version_id, site=site)
+    
+    # احفظ الحالة الحالية في نسخة جديدة قبل التراجع
+    SiteVersion.objects.create(
+        site=site,
+        code_snapshot=site.generated_code,
+        instruction_applied='Auto-save before rollback'
+    )
+    
+    site.generated_code = version.code_snapshot
+    site.save()
+    messages.success(request, f'✅ تم التراجع للنسخة #{version_id}')
     return redirect('aibuilder:preview_site', site_id=site.id)

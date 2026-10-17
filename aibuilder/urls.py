@@ -9,4 +9,5 @@ urlpatterns = [
     path('export/<int:site_id>/', views.export_zip, name='export_zip'),
     path('edit/<int:site_id>/', views.edit_with_ai, name='edit_with_ai'),
     path('deploy/<int:site_id>/', views.deploy_github, name='deploy_github'),
+    path('rollback/<int:site_id>/<int:version_id>/', views.rollback_version, name='rollback_version'),
 ]

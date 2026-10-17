@@ -50,3 +50,57 @@ Example:
         return text, None
     except Exception as e:
         return None, str(e)
+
+
+def inject_seo_tags(html_content, site_title, site_desc):
+    """حقن الـ SEO Tags في الـ HTML المولد تلقائياً"""
+    import re
+    from datetime import datetime
+    
+    seo_block = f"""
+    <!-- SEO Auto-Generated -->
+    <meta name="description" content="{site_desc[:160]}">
+    <meta name="keywords" content="web design, development, Nexora, {site_title}">
+    <meta name="author" content="Nexora">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{site_title}">
+    <meta property="og:description" content="{site_desc[:160]}">
+    <meta property="og:site_name" content="{site_title}">
+    <meta property="og:locale" content="ar_LB">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{site_title}">
+    <meta name="twitter:description" content="{site_desc[:160]}">
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {{
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "{site_title}",
+      "description": "{site_desc[:160]}",
+      "publisher": {{"@type": "Organization", "name": "Nexora"}}
+    }}
+    </script>
+    <!-- End SEO -->
+    """
+
+    # حقن قبل </head>
+    if '</head>' in html_content:
+        html_content = html_content.replace('</head>', seo_block + '</head>')
+    return html_content
+
+def apply_seo_to_pages(json_code, site_title="Nexora Website", site_desc="موقع احترافي مبني بواسطة Nexora"):
+    import json
+    try:
+        pages = json.loads(json_code)
+        for filename, html in pages.items():
+            if filename.endswith('.html'):
+                pages[filename] = inject_seo_tags(html, site_title, site_desc)
+        return json.dumps(pages)
+    except:
+        return json_code

@@ -38,3 +38,19 @@ class GeneratedWebsite(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.prompt[:50]}'
+
+
+class SiteVersion(models.Model):
+    """نسخة محفوظة من الموقع المولد (History / Rollback)"""
+    site = models.ForeignKey(GeneratedWebsite, on_delete=models.CASCADE, related_name='versions')
+    code_snapshot = models.TextField()
+    instruction_applied = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'نسخة موقع'
+        verbose_name_plural = 'نسخ المواقع'
+
+    def __str__(self):
+        return f'Version {self.id} of Site {self.site.id}'
